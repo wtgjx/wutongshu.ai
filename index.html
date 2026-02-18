@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>梧桐树 ai - 拆解爆火案例 · 解锁 AI 提示词</title>
+  <meta name="description" content="拆解全网最火 AI 案例，提供一键复制的提示词。包含 Vlog 展示、爆火提示词分享、AI 学习班三大栏目。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/index.css" />
+  <link rel="stylesheet" href="css/home.css" />
+</head>
+
+<body data-page="home">
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="navbar-brand">
+      <img class="brand-icon" src="img/梧桐树.png" alt="梧桐树">
+      <span>梧桐树 ai</span>
+    </a>
+    <div class="navbar-search">
+      <input type="text" placeholder="搜索提示词、教程..." id="search-input" />
+      <button>🔍</button>
+    </div>
+    <div class="navbar-tabs" id="navbar-tabs">
+      <a href="index.html" class="active" id="nav-home">首页</a>
+      <a href="vlog.html" id="nav-vlog">🎬 Vlog</a>
+      <a href="prompts.html" id="nav-prompts">🔥 爆火提示词<span class="tab-badge">HOT</span></a>
+      <a href="class.html" id="nav-class">📚 学习班</a>
+      <a href="about.html" id="nav-about">👥 关于我们</a>
+    </div>
+    <div class="navbar-right">
+      <a href="https://space.bilibili.com/" target="_blank" title="Bilibili" id="social-bilibili">📺</a>
+      <a href="https://www.douyin.com/" target="_blank" title="抖音" id="social-douyin">🎵</a>
+      <a href="https://www.xiaohongshu.com/" target="_blank" title="小红书" id="social-xhs">📕</a>
+    </div>
+    <button class="navbar-toggle" id="navbar-toggle" aria-label="菜单">☰</button>
+  </nav>
+
+  <!-- Filter Bar Removed -->
+
+  <!-- Hero Section -->
+  <!-- Hero Carousel -->
+  <section class="hero-carousel" id="hero-carousel">
+    <!-- Layer 1: Backgrounds -->
+    <div class="carousel-bg" id="carousel-bg">
+      <div class="bg-item active" style="background-image: url('https://picsum.photos/seed/trailer/640/360');"></div>
+      <div class="bg-item" style="background-image: url('https://picsum.photos/seed/ghibli/640/360');"></div>
+      <div class="bg-item" style="background-image: url('https://picsum.photos/seed/apple/640/360');"></div>
+      <div class="bg-item" style="background-image: url('https://picsum.photos/seed/cyber/640/360');"></div>
+      <div class="bg-item" style="background-image: url('https://picsum.photos/seed/copy/640/360');"></div>
+    </div>
+
+    <!-- Layer 2: Content Info -->
+    <div class="carousel-content">
+      <div class="content-text" id="content-text">
+        <h1 id="hero-title">全网爆火！一句提示词生成电影级预告片</h1>
+        <p id="hero-desc">这个提示词在全网疯传！只需一句话就能让 AI 生成好莱坞级别的电影预告片。</p>
+
+        <div class="hero-actions">
+          <a href="#" class="btn-primary">🔥 查看详情</a>
+        </div>
+
+        <!-- Navigation Controls (Arrows + Custom Pagination) -->
+        <div class="carousel-controls">
+          <button id="prev-slide" class="control-btn" aria-label="Previous">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+          <div class="carousel-indicators" id="carousel-indicators">
+            <!-- Injected via JS -->
+          </div>
+          <button id="next-slide" class="control-btn" aria-label="Next">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layer 3: Navigation / Card Stack (Right Side) -->
+    <div class="carousel-nav" id="carousel-nav">
+      <!-- Logic: First item is active (hidden/synced                <!-- Navigation Deck (Right) -->
+      <div class="nav-deck">
+        <!-- Cards for Next/Future slides -->
+        <!-- Index 1: Ghibli -->
+        <div class="nav-card" data-index="1">
+          <div class="card-content">抖音爆款：AI 吉卜力风格...</div>
+          <img src="https://picsum.photos/seed/ghibli/640/360" alt="Ghibli">
+        </div>
+        <!-- Index 2: Apple -->
+        <div class="nav-card" data-index="2">
+          <div class="card-content">小红书刷屏：AI 生成苹果...</div>
+          <img src="https://picsum.photos/seed/apple/640/360" alt="Apple">
+        </div>
+        <!-- Index 3: Cyber -->
+        <div class="nav-card" data-index="3">
+          <div class="card-content">Sora 逆天！AI 生成赛博...</div>
+          <img src="https://picsum.photos/seed/cyber/640/360" alt="Cyber">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee Banner -->
+  <div class="marquee-wrapper">
+    <div class="marquee-track">
+      <span class="marquee-item"><span class="marquee-dot">●</span> Sora 2 电影预告 · 8.9万观看</span>
+      <span class="marquee-item"><span class="marquee-dot">●</span> 吉卜力风格转换 · 5.6万复制</span>
+      <span class="marquee-item"><span class="marquee-dot">●</span> ChatGPT 文案大师 · 4.2万复制</span>
+      <span class="marquee-item"><span class="marquee-dot">●</span> Midjourney 人像精修 · 3.5万复制</span>
+      <span class="marquee-item"><span class="marquee-dot">●</span> 赛博朋克飞行镜头 · 2.9万复制</span>
+      <span class="marquee-item"><span class="marquee-dot">●</span> AI 苹果风宣传片 · 1.8万复制</span>
+      <span class="marquee-item"><span class="marquee-dot">●</span> Sora 2 电影预告 · 8.9万观看</span>
+      <span class="marquee-item"><span class="marquee-dot">●</span> 吉卜力风格转换 · 5.6万复制</span>
+      <span class="marquee-item"><span class="marquee-dot">●</span> ChatGPT 文案大师 · 4.2万复制</span>
+      <span class="marquee-item"><span class="marquee-dot">●</span> Midjourney 人像精修 · 3.5万复制</span>
+      <span class="marquee-item"><span class="marquee-dot">●</span> 赛博朋克飞行镜头 · 2.9万复制</span>
+      <span class="marquee-item"><span class="marquee-dot">●</span> AI 苹果风宣传片 · 1.8万复制</span>
+    </div>
+  </div>
+
+  <!-- Stats Banner -->
+  <div class="stats-banner">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <div class="stat-num" id="stat-cases">17</div>
+        <div class="stat-label">精选案例</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="stat-prompts">50+</div>
+        <div class="stat-label">提示词模板</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="stat-copies">27.3万</div>
+        <div class="stat-label">累计复制</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="stat-views">63.5万</div>
+        <div class="stat-label">总浏览量</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <div class="home-section" id="section-vlog">
+      <div class="home-section-header">
+        <h2>
+          <span class="sec-icon sec-icon-vlog">🎬</span>
+          Vlog 展示
+          <span class="section-subtitle">用 AI 创作的个人 Vlog 合集</span>
+        </h2>
+        <a href="vlog.html" class="btn-view-all" id="view-all-vlog">查看全部 →</a>
+      </div>
+      <div class="video-grid" id="vlog-grid"></div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="home-section" id="section-prompts">
+      <div class="home-section-header">
+        <h2>
+          <span class="sec-icon sec-icon-viral">🔥</span>
+          爆火提示词
+          <span class="section-subtitle">拆解全网最火案例的核心提示词</span>
+        </h2>
+        <a href="prompts.html" class="btn-view-all" id="view-all-prompts">查看全部 →</a>
+      </div>
+      <div class="video-grid" id="prompt-grid"></div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="home-section" id="section-class">
+      <div class="home-section-header">
+        <h2>
+          <span class="sec-icon sec-icon-class">📚</span>
+          AI 学习班
+          <span class="section-subtitle">社区共建内容，投稿获曝光</span>
+        </h2>
+        <a href="class.html" class="btn-view-all" id="view-all-class">查看全部 →</a>
+      </div>
+      <div class="video-grid" id="class-grid"></div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="home-section" id="section-related">
+      <div class="home-section-header">
+        <h2>
+          <span class="sec-icon sec-icon-related">🔗</span>
+          相关作品
+          <span class="section-subtitle">跨分类精选推荐，发现更多灵感</span>
+        </h2>
+      </div>
+      <div class="video-grid" id="related-grid"></div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+      <div class="cta-card">
+        <div class="cta-content">
+          <h2>📚 加入 AI 学习班<br />一起拆解爆火案例</h2>
+          <p>投稿你的 AI 创作教程，获得首页推荐曝光。无论你是新手还是老手，我们欢迎所有人分享和学习。</p>
+          <button class="btn-hero btn-hero-primary" id="cta-join" onclick="openBadgeModal()">立即加入 →</button>
+        </div>
+        <div class="cta-benefits">
+          <div class="cta-benefit">
+            <span class="cta-benefit-icon">📝</span>
+            <div class="cta-benefit-text"><strong>投稿即推荐</strong><span>优质内容获首页推荐位曝光</span></div>
+          </div>
+          <div class="cta-benefit">
+            <span class="cta-benefit-icon">💬</span>
+            <div class="cta-benefit-text"><strong>社区交流</strong><span>与 AI 爱好者一起讨论提示词技巧</span></div>
+          </div>
+          <div class="cta-benefit">
+            <span class="cta-benefit-icon">🎁</span>
+            <div class="cta-benefit-text"><strong>专属福利</strong><span>获取最新 AI 工具的内测资格</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        梧桐树 ai
+        <span>© 2026 All rights reserved. 拆解爆火案例 · 解锁 AI 提示词</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://space.bilibili.com/" target="_blank" id="footer-bilibili">📺 Bilibili</a>
+        <a href="https://www.douyin.com/" target="_blank" id="footer-douyin">🎵 抖音</a>
+        <a href="https://www.xiaohongshu.com/" target="_blank" id="footer-xhs">📕 小红书</a>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" aria-label="返回顶部">↑</button>
+  <div class="toast" id="toast"></div>
+
+  <!-- ======== Badge Modal ======== -->
+  <div class="badge-overlay" id="badge-overlay">
+    <div class="badge-lanyard" id="badge-lanyard">
+      <!-- Strap -->
+      <div class="strap"></div>
+      <!-- Clip -->
+      <div class="clip">
+        <div class="clip-hole"></div>
+      </div>
+      <!-- Card -->
+      <div class="badge" onclick="event.stopPropagation()">
+        <button class="badge-x" onclick="closeBadgeModal()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+        </button>
+
+        <div class="badge-top">
+          <div class="badge-brand">梧桐树 ai</div>
+          <div class="badge-sep"></div>
+          <div class="badge-type">MEMBER</div>
+        </div>
+
+        <div class="badge-center">
+          <img src="img/站主二维码.png" alt="微信二维码" class="badge-qr" />
+          <p class="badge-hint">微信扫码添加</p>
+        </div>
+
+        <div class="badge-bottom">
+          <input type="email" id="badge-email" class="badge-email" placeholder="你的 QQ 邮箱" />
+          <button class="badge-btn" id="badge-submit" onclick="submitBadgeEmail()">加入</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scattered Mascot Container (Background) -->
+    <div id="mascot-container" class="mascot-container"></div>
+  </div>
+
+
+  <script src="js/data.js"></script>
+  <script src="js/clipboard.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { var o = document.getElementById('badge-overlay'); if (o && o.classList.contains('active')) closeBadgeModal(); }
+    });
+  </script>
+
+</body>
+
+</html>

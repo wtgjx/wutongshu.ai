@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>管理后台 - 梧桐树 ai</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="css/admin.css" />
+</head>
+
+<body>
+
+    <!-- ========== Password Gate ========== -->
+    <div class="login-gate" id="login-gate">
+        <div class="login-card">
+            <div class="login-icon">🔐</div>
+            <h1>管理后台</h1>
+            <p>请输入管理密码以访问后台</p>
+            <input type="password" id="pwd-input" placeholder="输入密码..." autofocus />
+            <button class="login-btn" onclick="tryLogin()">进入后台</button>
+            <div class="login-error" id="login-error">密码错误，请重试</div>
+        </div>
+    </div>
+
+    <!-- ========== Admin Panel ========== -->
+    <div class="admin-container" id="admin-panel">
+        <!-- Header -->
+        <div class="admin-header">
+            <h1>
+                <img src="img/梧桐树.png" alt="logo">
+                梧桐树 ai · 管理后台
+            </h1>
+            <div class="admin-header-actions">
+                <span class="data-status" id="data-status"></span>
+                <button class="btn btn-danger" onclick="confirmReset()">🗑️ 恢复默认</button>
+                <button class="btn" onclick="window.location.href='index.html'">↗ 查看网站</button>
+                <button class="btn" onclick="doLogout()">退出</button>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="admin-tabs" id="admin-tabs">
+            <button class="admin-tab active" data-cat="vlog">
+                🎬 Vlog 展示<span class="tab-count" id="count-vlog">0</span>
+            </button>
+            <button class="admin-tab" data-cat="viral-prompts">
+                🔥 爆火提示词<span class="tab-count" id="count-viral-prompts">0</span>
+            </button>
+            <button class="admin-tab" data-cat="ai-class">
+                📚 AI 学习班<span class="tab-count" id="count-ai-class">0</span>
+            </button>
+        </div>
+
+        <!-- Toolbar -->
+        <div style="display:flex; justify-content:flex-end; margin-bottom:16px;">
+            <button class="btn btn-primary" onclick="openEditorForNew()">＋ 新增内容</button>
+        </div>
+
+        <!-- Content List -->
+        <div class="content-list" id="content-list"></div>
+    </div>
+
+    <!-- ========== Editor Modal ========== -->
+    <div class="editor-overlay" id="editor-overlay">
+        <div class="editor-panel">
+            <div class="editor-header">
+                <h2 id="editor-title">编辑内容</h2>
+                <button class="editor-close" onclick="closeEditor()">✕</button>
+            </div>
+            <div class="editor-body" id="editor-body">
+                <!-- Basic Info -->
+                <div class="form-group">
+                    <label class="form-label">标题</label>
+                    <input class="form-input" id="f-title" placeholder="内容标题" />
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">栏目</label>
+                        <select class="form-select" id="f-category">
+                            <option value="vlog">Vlog 展示</option>
+                            <option value="viral-prompts">爆火提示词</option>
+                            <option value="ai-class">AI 学习班</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">ID（唯一标识）</label>
+                        <input class="form-input" id="f-id" placeholder="如 vlog-006" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">封面图 URL</label>
+                    <input class="form-input" id="f-cover" placeholder="https://..." />
+                </div>
+                <div class="form-row-3">
+                    <div class="form-group">
+                        <label class="form-label">日期</label>
+                        <input class="form-input" id="f-date" type="date" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">作者</label>
+                        <input class="form-input" id="f-author" placeholder="站长" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">时长</label>
+                        <input class="form-input" id="f-duration" placeholder="05:32" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">播放量</label>
+                        <input class="form-input" id="f-views" type="number" placeholder="0" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">复制量</label>
+                        <input class="form-input" id="f-copies" type="number" placeholder="0" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">标签（逗号分隔）</label>
+                    <input class="form-input" id="f-tags" placeholder="Vlog, Sora, 日常" />
+                </div>
+
+                <!-- Opening -->
+                <div class="form-section-title">📖 开场白</div>
+                <div class="form-group">
+                    <label class="form-label">摘要</label>
+                    <textarea class="form-textarea" id="f-opening" placeholder="内容简介..."></textarea>
+                </div>
+
+                <!-- Steps -->
+                <div class="form-section-title">
+                    🎯 提示词 / 步骤
+                    <button class="btn btn-sm btn-primary" onclick="addStepField()">＋ 添加步骤</button>
+                </div>
+                <div id="steps-container"></div>
+
+                <!-- Closing -->
+                <div class="form-section-title">🔚 结语</div>
+                <div class="form-group">
+                    <label class="form-label">总结</label>
+                    <textarea class="form-textarea" id="f-closing" placeholder="结语总结..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">相关内容 ID（逗号分隔）</label>
+                    <input class="form-input" id="f-related" placeholder="vlog-001, prompt-002" />
+                </div>
+            </div>
+            <div class="editor-footer">
+                <button class="btn" onclick="closeEditor()">取消</button>
+                <button class="btn btn-primary" onclick="saveItem()">💾 保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script>
+        // ============================================
+        // Admin Panel Logic
+        // ============================================
+
+        var ADMIN_PWD = 'wutong2025';
+        var currentCategory = 'vlog';
+        var editingId = null; // null = new item
+        var stepCount = 0;
+
+        // ---------- Authentication ----------
+
+        // Check session
+        (function () {
+            if (sessionStorage.getItem('admin_auth') === '1') {
+                showPanel();
+            }
+        })();
+
+        document.getElementById('pwd-input').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') tryLogin();
+        });
+
+        function tryLogin() {
+            var pwd = document.getElementById('pwd-input').value;
+            if (pwd === ADMIN_PWD) {
+                sessionStorage.setItem('admin_auth', '1');
+                showPanel();
+            } else {
+                var err = document.getElementById('login-error');
+                err.style.display = 'block';
+                document.getElementById('pwd-input').value = '';
+                document.getElementById('pwd-input').focus();
+                setTimeout(function () { err.style.display = 'none'; }, 2000);
+            }
+        }
+
+        function doLogout() {
+            sessionStorage.removeItem('admin_auth');
+            location.reload();
+        }
+
+        function showPanel() {
+            document.getElementById('login-gate').style.display = 'none';
+            document.getElementById('admin-panel').classList.add('active');
+            refreshTabs();
+            renderList();
+            updateStatus();
+        }
+
+        // ---------- Tabs ----------
+
+        document.getElementById('admin-tabs').addEventListener('click', function (e) {
+            var tab = e.target.closest('.admin-tab');
+            if (!tab) return;
+            document.querySelectorAll('.admin-tab').forEach(function (t) { t.classList.remove('active'); });
+            tab.classList.add('active');
+            currentCategory = tab.dataset.cat;
+            renderList();
+        });
+
+        function refreshTabs() {
+            var data = loadContentData();
+            var cats = ['vlog', 'viral-prompts', 'ai-class'];
+            cats.forEach(function (cat) {
+                var count = data.filter(function (d) { return d.category === cat; }).length;
+                var el = document.getElementById('count-' + cat);
+                if (el) el.textContent = count;
+            });
+        }
+
+        function updateStatus() {
+            var badge = document.getElementById('data-status');
+            if (hasCustomData()) {
+                badge.textContent = '⚡ 自定义数据';
+                badge.className = 'data-status custom';
+            } else {
+                badge.textContent = '✓ 默认数据';
+                badge.className = 'data-status default';
+            }
+        }
+
+        // ---------- Content List ----------
+
+        function renderList() {
+            var data = loadContentData();
+            var items = data.filter(function (d) { return d.category === currentCategory; });
+            var container = document.getElementById('content-list');
+
+            if (items.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>这个栏目还没有内容</p><p>点击上方「新增内容」开始创建</p></div>';
+                return;
+            }
+
+            container.innerHTML = items.map(function (item) {
+                return '<div class="content-item" onclick="openEditor(\'' + item.id + '\')">'
+                    + '<img class="content-item-cover" src="' + (item.cover || '') + '" alt="" onerror="this.style.display=\'none\'">'
+                    + '<div class="content-item-info">'
+                    + '<div class="content-item-title">' + escapeHtml(item.title) + '</div>'
+                    + '<div class="content-item-meta">'
+                    + '<span>' + item.date + '</span>'
+                    + '<span>' + item.author + '</span>'
+                    + '<span>' + (item.main && item.main.steps ? item.main.steps.length : 0) + ' 个步骤</span>'
+                    + '</div></div>'
+                    + '<div class="content-item-actions">'
+                    + '<button class="btn btn-sm btn-danger" onclick="event.stopPropagation(); deleteItem(\'' + item.id + '\')">删除</button>'
+                    + '</div></div>';
+            }).join('');
+        }
+
+        // ---------- Editor ----------
+
+        function openEditor(id) {
+            editingId = id;
+            var item = null;
+            stepCount = 0;
+
+            if (id) {
+                item = loadContentData().find(function (d) { return d.id === id; });
+                document.getElementById('editor-title').textContent = '编辑内容';
+            } else {
+                document.getElementById('editor-title').textContent = '新增内容';
+            }
+
+            // Fill form
+            document.getElementById('f-title').value = item ? item.title : '';
+            document.getElementById('f-category').value = item ? item.category : currentCategory;
+            document.getElementById('f-id').value = item ? item.id : generateId();
+            document.getElementById('f-cover').value = item ? item.cover : '';
+            document.getElementById('f-date').value = item ? item.date : new Date().toISOString().slice(0, 10);
+            document.getElementById('f-author').value = item ? item.author : '站长';
+            document.getElementById('f-duration').value = item ? item.duration : '';
+            document.getElementById('f-views').value = item ? item.views : 0;
+            document.getElementById('f-copies').value = item ? item.copies : 0;
+            document.getElementById('f-tags').value = item && item.tags ? item.tags.join(', ') : '';
+            document.getElementById('f-opening').value = item && item.opening ? item.opening.summary : '';
+            document.getElementById('f-closing').value = item && item.closing ? item.closing.summary : '';
+            document.getElementById('f-related').value = item && item.closing && item.closing.relatedIds ? item.closing.relatedIds.join(', ') : '';
+
+            // If editing, disable ID change
+            document.getElementById('f-id').disabled = !!id;
+
+            // Steps
+            var stepsEl = document.getElementById('steps-container');
+            stepsEl.innerHTML = '';
+            stepCount = 0;
+
+            if (item && item.main && item.main.steps) {
+                item.main.steps.forEach(function (step) {
+                    addStepField(step);
+                });
+            }
+
+            document.getElementById('editor-overlay').classList.add('active');
+        }
+
+        function openEditorForNew() {
+            openEditor(null);
+        }
+
+        function closeEditor() {
+            document.getElementById('editor-overlay').classList.remove('active');
+            editingId = null;
+        }
+
+        function addStepField(stepData) {
+            stepCount++;
+            var n = stepCount;
+            var container = document.getElementById('steps-container');
+
+            var card = document.createElement('div');
+            card.className = 'step-card';
+            card.id = 'step-' + n;
+            card.innerHTML = '<div class="step-card-header">'
+                + '<span class="step-number">步骤 ' + n + '</span>'
+                + '<button class="step-remove" onclick="removeStep(' + n + ')">✕</button>'
+                + '</div>'
+                + '<div class="form-group"><label class="form-label">步骤标题</label>'
+                + '<input class="form-input step-title" value="' + escapeAttr(stepData ? stepData.title : '') + '" placeholder="场景一：清晨起床" /></div>'
+                + '<div class="form-group"><label class="form-label">描述</label>'
+                + '<input class="form-input step-desc" value="' + escapeAttr(stepData ? stepData.description : '') + '" placeholder="简要描述" /></div>'
+                + '<div class="form-group"><label class="form-label">提示词 / Prompt</label>'
+                + '<textarea class="form-textarea step-prompt" placeholder="输入完整提示词...">' + escapeHtml(stepData ? stepData.prompt : '') + '</textarea></div>'
+                + '<div class="form-row">'
+                + '<div class="form-group"><label class="form-label">模型</label>'
+                + '<input class="form-input step-model" value="' + escapeAttr(stepData && stepData.params ? (stepData.params.model || '') : '') + '" placeholder="Sora 2" /></div>'
+                + '<div class="form-group"><label class="form-label">时长 / 参数</label>'
+                + '<input class="form-input step-param" value="' + escapeAttr(stepData && stepData.params ? (stepData.params.duration || stepData.params.type || stepData.params.tip || '') : '') + '" placeholder="15s" /></div>'
+                + '</div>';
+            container.appendChild(card);
+        }
+
+        function removeStep(n) {
+            var el = document.getElementById('step-' + n);
+            if (el) el.remove();
+        }
+
+        // ---------- Save / Delete ----------
+
+        function saveItem() {
+            var data = loadContentData();
+            var id = document.getElementById('f-id').value.trim();
+            var title = document.getElementById('f-title').value.trim();
+
+            if (!id || !title) {
+                showToast('请填写标题和 ID', true);
+                return;
+            }
+
+            // Collect steps
+            var steps = [];
+            document.querySelectorAll('.step-card').forEach(function (card) {
+                var stepTitle = card.querySelector('.step-title').value.trim();
+                var stepDesc = card.querySelector('.step-desc').value.trim();
+                var stepPrompt = card.querySelector('.step-prompt').value.trim();
+                var stepModel = card.querySelector('.step-model').value.trim();
+                var stepParam = card.querySelector('.step-param').value.trim();
+
+                if (stepTitle || stepPrompt) {
+                    var params = {};
+                    if (stepModel) params.model = stepModel;
+                    if (stepParam) params.duration = stepParam;
+                    steps.push({
+                        title: stepTitle,
+                        description: stepDesc,
+                        prompt: stepPrompt,
+                        params: params
+                    });
+                }
+            });
+
+            var tagsStr = document.getElementById('f-tags').value.trim();
+            var relatedStr = document.getElementById('f-related').value.trim();
+
+            var newItem = {
+                id: id,
+                category: document.getElementById('f-category').value,
+                title: title,
+                cover: document.getElementById('f-cover').value.trim(),
+                date: document.getElementById('f-date').value,
+                author: document.getElementById('f-author').value.trim() || '站长',
+                views: parseInt(document.getElementById('f-views').value) || 0,
+                copies: parseInt(document.getElementById('f-copies').value) || 0,
+                duration: document.getElementById('f-duration').value.trim(),
+                tags: tagsStr ? tagsStr.split(',').map(function (s) { return s.trim(); }) : [],
+                opening: { summary: document.getElementById('f-opening').value.trim(), preview: '' },
+                main: { steps: steps },
+                closing: {
+                    summary: document.getElementById('f-closing').value.trim(),
+                    socialLinks: {},
+                    relatedIds: relatedStr ? relatedStr.split(',').map(function (s) { return s.trim(); }) : []
+                }
+            };
+
+            if (editingId) {
+                // Update existing
+                var idx = data.findIndex(function (d) { return d.id === editingId; });
+                if (idx !== -1) {
+                    data[idx] = newItem;
+                }
+            } else {
+                // Check duplicate ID
+                if (data.some(function (d) { return d.id === id; })) {
+                    showToast('ID「' + id + '」已存在，请换一个', true);
+                    return;
+                }
+                data.push(newItem);
+            }
+
+            saveContentData(data);
+            closeEditor();
+            refreshTabs();
+            renderList();
+            updateStatus();
+            showToast(editingId ? '✅ 内容已更新' : '✅ 内容已添加');
+        }
+
+        function deleteItem(id) {
+            if (!confirm('确定删除这条内容吗？此操作不可撤销。')) return;
+            var data = loadContentData();
+            data = data.filter(function (d) { return d.id !== id; });
+            saveContentData(data);
+            refreshTabs();
+            renderList();
+            updateStatus();
+            showToast('已删除');
+        }
+
+        function confirmReset() {
+            if (!confirm('确定恢复默认数据吗？所有自定义修改将丢失！')) return;
+            resetContentData();
+            refreshTabs();
+            renderList();
+            updateStatus();
+            showToast('✅ 已恢复默认数据');
+        }
+
+        // ---------- Helpers ----------
+
+        function generateId() {
+            var prefix = currentCategory === 'vlog' ? 'vlog' : currentCategory === 'viral-prompts' ? 'prompt' : 'class';
+            return prefix + '-' + Date.now().toString(36);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function escapeAttr(str) {
+            if (!str) return '';
+            return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        function showToast(msg, isError) {
+            var toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.style.background = isError ? 'var(--admin-red)' : 'var(--admin-green)';
+            toast.classList.add('show');
+            setTimeout(function () { toast.classList.remove('show'); }, 2500);
+        }
+    </script>
+
+</body>
+
+</html>

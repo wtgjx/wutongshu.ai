@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>内容详情 - 梧桐树 ai</title>
+    <meta name="description" content="查看 AI 提示词详情，一键复制即可使用。" />
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/detail.css" />
+</head>
+
+<body data-page="detail">
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="navbar-brand">
+            <img class="brand-icon" src="img/梧桐树.png" alt="梧桐树">
+            <span>梧桐树 ai</span>
+        </a>
+        <div class="navbar-search">
+            <input type="text" placeholder="搜索提示词、教程..." />
+            <button>🔍</button>
+        </div>
+        <div class="navbar-tabs" id="navbar-tabs">
+            <a href="index.html" id="nav-home">首页</a>
+            <a href="vlog.html" id="nav-vlog">🎬 Vlog</a>
+            <a href="prompts.html" id="nav-prompts">🔥 爆火提示词</a>
+            <a href="class.html" id="nav-class">📚 学习班</a>
+            <a href="about.html" id="nav-about">👥 关于我们</a>
+        </div>
+        <div class="navbar-right">
+            <a href="https://space.bilibili.com/" target="_blank" title="Bilibili">📺</a>
+            <a href="https://www.douyin.com/" target="_blank" title="抖音">🎵</a>
+            <a href="https://www.xiaohongshu.com/" target="_blank" title="小红书">📕</a>
+        </div>
+        <button class="navbar-toggle" id="navbar-toggle" aria-label="菜单">☰</button>
+    </nav>
+
+    <!-- Detail Content -->
+    <div id="detail-content" class="detail-layout">
+
+        <!-- Back link -->
+        <div class="detail-back">
+            <a href="index.html">← 返回首页</a>
+        </div>
+
+        <!-- Title bar -->
+        <div class="detail-title-bar">
+            <h1 class="detail-title" id="detail-title">加载中...</h1>
+            <div class="detail-meta" id="detail-meta"></div>
+        </div>
+
+        <!-- Video Player -->
+        <div class="detail-video" id="detail-video">
+            <div class="video-placeholder" id="video-placeholder">
+                <div class="video-placeholder-icon">▶</div>
+                <p>视频展示区</p>
+            </div>
+        </div>
+
+        <!-- Prompt Section -->
+        <div class="detail-prompt-section" id="prompt-section">
+            <!-- Rendered by JS: one prompt block per step -->
+        </div>
+
+        <!-- Reference Materials (optional, shown only if data provides them) -->
+        <div class="detail-refs" id="detail-refs" style="display:none;">
+            <div class="refs-header">
+                <span class="refs-label">📎 参考素材</span>
+                <span class="refs-hint">生成该视频使用的参考图片 / 视频</span>
+            </div>
+            <div class="refs-grid" id="refs-grid">
+                <!-- Rendered by JS -->
+            </div>
+        </div>
+
+        <!-- Related -->
+        <div class="detail-related" id="detail-related" style="display:none;">
+            <h2 class="related-title">相关推荐</h2>
+            <div class="related-grid" id="related-grid"></div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                梧桐树 ai
+                <span>© 2026 All rights reserved.</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://space.bilibili.com/" target="_blank">📺 Bilibili</a>
+                <a href="https://www.douyin.com/" target="_blank">🎵 抖音</a>
+                <a href="https://www.xiaohongshu.com/" target="_blank">📕 小红书</a>
+            </div>
+        </div>
+    </footer>
+
+    <button class="back-to-top" id="back-to-top" aria-label="返回顶部">↑</button>
+    <div class="toast" id="toast"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/clipboard.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

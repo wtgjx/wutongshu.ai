@@ -1,0 +1,643 @@
+/* ============================================
+   AI Prompt Lab - Home Page Styles
+   Neo-Brutalist Hero + CTA (B站 Compatible)
+   ============================================ */
+
+/* ---------- Hero ---------- */
+
+/* ---------- Hero Carousel (Refined) ---------- */
+
+.hero-carousel {
+    margin-top: 56px;
+    height: 70vh;
+    /* Taller, more cinematic */
+    min-height: 600px;
+    position: relative;
+    overflow: hidden;
+    background: #000;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+/* Layer 1: Backgrounds (Slide Logic) */
+.carousel-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.carousel-bg .bg-item {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease;
+    will-change: transform;
+    /* Default Hidden State */
+    opacity: 0;
+    transform: scale(1.1);
+    /* Slight zoom for dramatic effect */
+    filter: brightness(0.4);
+    /* Darken for text readability */
+}
+
+/* Active: Center, Visible */
+.carousel-bg .bg-item.active {
+    opacity: 1;
+    z-index: 2;
+    transform: translateX(0) scale(1);
+    filter: brightness(0.6);
+}
+
+/* Next: Ready on Right */
+.carousel-bg .bg-item.next {
+    opacity: 1;
+    z-index: 1;
+    transform: translateX(100%) scale(1);
+}
+
+/* Prev: Exit to Left */
+.carousel-bg .bg-item.prev {
+    opacity: 1;
+    z-index: 1;
+    transform: translateX(-100%) scale(1);
+}
+
+/* Content Layer */
+.carousel-content {
+    position: relative;
+    z-index: 50;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: 45% 1fr;
+    gap: 0;
+    height: 100%;
+    align-items: center;
+    pointer-events: none;
+}
+
+.content-text {
+    pointer-events: auto;
+    color: white;
+    padding-right: 40px;
+    text-align: left;
+    /* Ensure text doesn't overlap the fixed buttons */
+    padding-bottom: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.content-text h1 {
+    font-size: 5rem;
+    font-weight: 900;
+    line-height: 0.9;
+    margin-bottom: 24px;
+    text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 1s cubic-bezier(0.19, 1, 0.22, 1) 0.1s;
+    /* Expo Ease Out */
+    letter-spacing: -0.02em;
+}
+
+.content-text h1.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+
+.content-text p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 0;
+    /* Margin handled by absolute positioning of buttons */
+    max-width: 90%;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1s cubic-bezier(0.19, 1, 0.22, 1) 0.2s;
+    /* Stagger +0.1s */
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 300;
+}
+
+.content-text p.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hero-actions {
+    position: absolute;
+    bottom: 150px;
+    /* Fixed position */
+    left: 40px;
+    /* Align with container padding */
+    opacity: 0;
+    /* Initial State */
+    transform: translateY(30px);
+    /* Initial State */
+    /* Transition only on load/show, NOT on update */
+    transition: opacity 1s cubic-bezier(0.19, 1, 0.22, 1) 0.3s, transform 1s cubic-bezier(0.19, 1, 0.22, 1) 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    z-index: 60;
+}
+
+.hero-actions.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- Carousel Controls (New) --- */
+.carousel-controls {
+    position: absolute;
+    bottom: 40px;
+    /* Fixed position */
+    left: 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    width: 40%;
+    /* Span the left column roughly */
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s cubic-bezier(0.19, 1, 0.22, 1) 0.4s, transform 1s cubic-bezier(0.19, 1, 0.22, 1) 0.4s;
+    z-index: 60;
+}
+
+.carousel-controls.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.control-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.control-btn:hover {
+    background: white;
+    color: black;
+    transform: scale(1.1);
+}
+
+.carousel-indicators {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.indicator-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.indicator-dot.active {
+    width: 24px;
+    height: 6px;
+    background: white;
+    border-radius: 4px;
+}
+
+/* Layer 3: Navigation Deck (Right Side) */
+.carousel-nav {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50%;
+    height: 100%;
+    z-index: 40;
+    padding-left: 40px;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* The Deck Wrapper */
+.nav-deck {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    height: 100%;
+    position: relative;
+    padding-left: 0;
+    transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+    /* Matches Fly-In */
+}
+
+.nav-card {
+    flex-shrink: 0;
+    width: 260px;
+    height: 380px;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+    pointer-events: auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-card:hover {
+    transform: rotate(-3deg) scale(1.05);
+    box-shadow: 0 35px 70px rgba(0, 0, 0, 0.7);
+}
+
+.nav-card img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    opacity: 0.6;
+    transition: transform 0.6s ease, opacity 0.4s ease;
+}
+
+.nav-card:hover img {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+/* Animation Classes */
+.card-fly-in {
+    position: absolute;
+    z-index: 999;
+    transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+    /* Core Cinematic Move */
+    pointer-events: none;
+    transform-origin: center center;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+}
+
+.card-fly-in.expanding {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    /* Fit container */
+    height: 100% !important;
+    /* Fit container */
+    border-radius: 0 !important;
+    margin: 0 !important;
+    transform: none !important;
+    /* Ensure no scale/translate interference */
+    filter: brightness(0.6);
+    /* Match the background dimming */
+    box-shadow: none;
+    z-index: 9;
+    /* Below Text (10) but above BG */
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+    .hero-carousel {
+        height: auto;
+        min-height: 600px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .carousel-content {
+        grid-template-columns: 1fr;
+        padding: 40px 24px;
+        text-align: center;
+    }
+
+    .content-text {
+        padding-right: 0;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hero-actions {
+        justify-content: center;
+    }
+
+    .carousel-controls {
+        justify-content: center;
+        border-top: none;
+    }
+
+    .carousel-nav {
+        display: none;
+        /* Hide deck on mobile for now */
+    }
+
+    .content-text h1 {
+        font-size: 3rem;
+    }
+}
+
+/* ---------- Marquee ---------- */
+
+.marquee-wrapper {
+    overflow: hidden;
+    background: var(--text-primary);
+    color: white;
+    padding: 10px 0;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    border-bottom: 1px solid var(--border);
+}
+
+.marquee-track {
+    display: flex;
+    white-space: nowrap;
+    animation: marqueeScroll 30s linear infinite;
+}
+
+.marquee-item {
+    padding: 0 40px;
+    opacity: 0.8;
+}
+
+.marquee-item .marquee-dot {
+    color: var(--brand);
+}
+
+@keyframes marqueeScroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* ---------- Home Content Sections ---------- */
+
+.home-section {
+    padding: 40px 24px 0;
+    max-width: 100%;
+}
+
+.home-section+.home-section {
+    margin-top: 8px;
+}
+
+.home-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.home-section-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.home-section-header h2 .sec-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.sec-icon-vlog {
+    background: var(--brand-light);
+}
+
+.sec-icon-viral {
+    background: var(--pink-light);
+}
+
+.sec-icon-class {
+    background: #e8f5e9;
+}
+
+.sec-icon-related {
+    background: #f3e8ff;
+}
+
+.home-section-header .section-subtitle {
+    font-size: 13px;
+    color: var(--text-sub);
+    margin-left: 12px;
+    font-weight: 400;
+}
+
+.home-section .video-grid {
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* Section divider */
+.section-divider {
+    max-width: 1600px;
+    margin: 32px auto 0;
+    height: 1px;
+    background: var(--border);
+}
+
+/* ---------- CTA Section ---------- */
+
+.cta-section {
+    padding: 48px 24px;
+}
+
+.cta-card {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--text-primary);
+    color: white;
+    border-radius: 16px;
+    padding: 48px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 48px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-card::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: var(--brand);
+    opacity: 0.06;
+    top: -100px;
+    right: -50px;
+    pointer-events: none;
+}
+
+.cta-card h2 {
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 16px;
+    line-height: 1.3;
+}
+
+.cta-card p {
+    color: #aaa;
+    margin-bottom: 24px;
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+/* Custom CTA Button Style (Matches Wu Tong's World) */
+#cta-join {
+    display: inline-block;
+    padding: 16px 48px;
+    font-size: 28px;
+    font-weight: 900;
+    color: #fff;
+    background: #3B82F6;
+    border: 4px solid #1a1a1a;
+    border-radius: 0;
+    box-shadow: 8px 8px 0 #ffffff;
+    cursor: pointer;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, background 0.3s ease;
+    transform: rotate(-3deg);
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.05em;
+    margin-top: 16px;
+}
+
+#cta-join:hover {
+    transform: rotate(0deg) scale(1.05);
+    box-shadow: 10px 10px 0 #ffffff;
+    background: #2563EB;
+}
+
+#cta-join:active {
+    animation: btn-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 4px 4px 0 #1a1a1a;
+    transform: scale(0.95) rotate(0deg);
+}
+
+@keyframes btn-pop {
+    0% {
+        transform: scale(0.95);
+    }
+
+    40% {
+        transform: scale(1.02);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.cta-benefits {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.cta-benefit {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.cta-benefit:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.cta-benefit-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.cta-benefit-text strong {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 2px;
+    font-size: 14px;
+}
+
+.cta-benefit-text span {
+    font-size: 12px;
+    color: #999;
+}
+
+@media (max-width: 899px) {
+    .cta-card {
+        grid-template-columns: 1fr;
+        padding: 32px 24px;
+    }
+}
+
+/* ---------- Stats Banner ---------- */
+
+.stats-banner {
+    background: var(--bg-white);
+    border-bottom: 1px solid var(--border);
+    padding: 24px;
+}
+
+.stats-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-num {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--brand);
+    letter-spacing: -0.02em;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--text-sub);
+    margin-top: 4px;
+}

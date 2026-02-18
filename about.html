@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>关于我们 - 梧桐树 ai</title>
+    <meta name="description" content="了解梧桐树 ai 背后的故事。" />
+    <link rel="stylesheet" href="css/index.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== About Page Layout ===== */
+
+        .about-page {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 80px 32px 64px;
+        }
+
+        /* --- Section 1: Welcome + ID Card --- */
+        .about-welcome {
+            display: flex;
+            gap: 56px;
+            align-items: flex-start;
+            margin-bottom: 64px;
+        }
+
+        .about-intro {
+            flex: 1;
+            padding-top: 8px;
+        }
+
+        .about-welcome-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 44px;
+            font-weight: 700;
+            color: #222;
+            line-height: 1.15;
+            margin-bottom: 4px;
+        }
+
+        .about-welcome-name {
+            display: inline-block;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 44px;
+            font-weight: 900;
+            color: #fff;
+            background: #3B82F6;
+            padding: 2px 16px 6px;
+            margin-bottom: 32px;
+            line-height: 1.3;
+            border: 3px solid #1a1a1a;
+            box-shadow: 5px 5px 0 #1a1a1a;
+            cursor: pointer;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+            transform: rotate(-2deg);
+        }
+
+        .about-welcome-name:hover {
+            transform: rotate(0deg) scale(1.03);
+            box-shadow: 6px 6px 0 #1a1a1a;
+        }
+
+        .about-welcome-name:active {
+            animation: name-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes name-pop {
+            0% {
+                transform: scale(1);
+            }
+
+            40% {
+                transform: scale(1.12);
+            }
+
+            70% {
+                transform: scale(0.97);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .about-bio {
+            margin-bottom: 22px;
+        }
+
+        .about-bio p {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #222;
+            margin: 0 0 10px;
+        }
+
+        .about-bio strong {
+            font-size: 15px;
+            color: #222;
+        }
+
+        .about-bio-highlight {
+            color: #3B82F6;
+            font-weight: 600;
+        }
+
+        /* ===== ID CARD — Pixel-Perfect Replica ===== */
+
+        .about-idcard-wrapper {
+            flex-shrink: 0;
+            position: relative;
+            width: 380px;
+        }
+
+        .about-idcard {
+            width: 380px;
+            background: #fff;
+            border: 3.5px solid #1a1a1a;
+            border-radius: 22px;
+            overflow: visible;
+            position: relative;
+            box-shadow: 8px 8px 0 #1a1a1a;
+            transform: rotate(-2deg);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .about-idcard:hover {
+            transform: rotate(0deg) scale(1.02);
+            box-shadow: 10px 10px 0 #1a1a1a;
+        }
+
+        .about-idcard:active {
+            animation: card-shake 0.5s ease;
+        }
+
+        @keyframes card-shake {
+
+            0%,
+            100% {
+                transform: rotate(-2deg);
+            }
+
+            15% {
+                transform: rotate(-4deg) translateX(-2px);
+            }
+
+            30% {
+                transform: rotate(1deg) translateX(2px);
+            }
+
+            45% {
+                transform: rotate(-3deg) translateX(-1px);
+            }
+
+            60% {
+                transform: rotate(0.5deg) translateX(1px);
+            }
+
+            75% {
+                transform: rotate(-1deg);
+            }
+        }
+
+        /* Green gradient header */
+        .idcard-header {
+            background: linear-gradient(135deg, #86efac 0%, #34d399 35%, #4ade80 60%, #a5f3c4 100%);
+            padding: 28px 28px 22px;
+            border-radius: 18px 18px 0 0;
+            position: relative;
+        }
+
+        .idcard-header-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #111;
+            letter-spacing: 0.04em;
+        }
+
+        .idcard-header-sub {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(0, 0, 0, 0.45);
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-top: 6px;
+        }
+
+        /* Pink avatar badge — overlaps top-right */
+        .idcard-pink-badge {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 82px;
+            height: 82px;
+            border-radius: 50%;
+            background: #F472B6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 4px 4px 0 #c44a8a, 0 6px 20px rgba(244, 114, 182, 0.5);
+            z-index: 2;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        }
+
+        .idcard-pink-badge:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 5px 5px 0 #c44a8a, 0 8px 24px rgba(244, 114, 182, 0.6);
+        }
+
+        .idcard-pink-badge:active {
+            animation: badge-wobble 0.6s ease;
+        }
+
+        @keyframes badge-wobble {
+
+            0%,
+            100% {
+                transform: scale(1) rotate(0deg);
+            }
+
+            10% {
+                transform: scale(1.15) rotate(-12deg);
+            }
+
+            20% {
+                transform: scale(1.1) rotate(10deg);
+            }
+
+            30% {
+                transform: scale(1.12) rotate(-8deg);
+            }
+
+            40% {
+                transform: scale(1.08) rotate(6deg);
+            }
+
+            50% {
+                transform: scale(1.1) rotate(-4deg);
+            }
+
+            60% {
+                transform: scale(1.05) rotate(3deg);
+            }
+
+            70% {
+                transform: scale(1.02) rotate(-2deg);
+            }
+
+            80% {
+                transform: scale(1.01) rotate(1deg);
+            }
+        }
+
+        .idcard-pink-badge .smiley {
+            font-size: 28px;
+            line-height: 1;
+        }
+
+        .idcard-pink-badge .badge-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 9px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.06em;
+            margin-top: 3px;
+        }
+
+        /* Body of the card — 2-column: photo | fields */
+        .idcard-body {
+            padding: 24px 28px;
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+        }
+
+        .idcard-left {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Photo frame */
+        .idcard-photo {
+            width: 130px;
+            height: 150px;
+            border: 2.5px solid #1a1a1a;
+            border-radius: 10px;
+            background: #f7f7f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.08);
+        }
+
+        .idcard-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .idcard-photo-placeholder {
+            font-size: 68px;
+            line-height: 1;
+        }
+
+        /* Tags row under photo */
+        .idcard-tags {
+            display: flex;
+            gap: 6px;
+        }
+
+        .idcard-tag {
+            padding: 4px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 20px;
+            border: 2px solid #1a1a1a;
+            background: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            box-shadow: 2px 2px 0 #1a1a1a;
+        }
+
+        .idcard-tag.blue {
+            background: #BFDBFE;
+        }
+
+        /* Fields on the right */
+        .idcard-fields {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .idcard-field {
+            border: 2.5px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 10px 16px;
+            position: relative;
+            box-shadow: 4px 4px 0 rgba(26, 26, 26, 0.15);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .idcard-field:hover {
+            transform: translateY(-1px);
+            box-shadow: 5px 5px 0 rgba(26, 26, 26, 0.2);
+        }
+
+        .idcard-field-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 9px;
+            font-weight: 700;
+            color: #E11D48;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2px;
+        }
+
+        .idcard-field-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: #111;
+            line-height: 1.35;
+        }
+
+        .idcard-field.yellow {
+            background: #FDE68A;
+            box-shadow: 4px 4px 0 #d4a843;
+        }
+
+        .idcard-field.blue {
+            background: #BFDBFE;
+            box-shadow: 4px 4px 0 #8aadcc;
+        }
+
+        .idcard-field.purple {
+            background: #E9D5FF;
+            box-shadow: 4px 4px 0 #b8a0d4;
+        }
+
+        /* Bottom section */
+        .idcard-bottom {
+            padding: 20px 28px 24px;
+            border-top: 2px dashed #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .idcard-bottom-left {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .idcard-id-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .idcard-id-value {
+            font-family: 'Space Grotesk', 'JetBrains Mono', 'Consolas', monospace;
+            font-size: 18px;
+            font-weight: 700;
+            color: #111;
+            letter-spacing: 0.03em;
+        }
+
+        /* Barcode */
+        .idcard-barcode {
+            display: flex;
+            align-items: flex-end;
+            gap: 1.5px;
+            margin-top: 10px;
+            height: 36px;
+        }
+
+        .idcard-barcode span {
+            display: block;
+            background: #222;
+            width: 2px;
+            border-radius: 1px;
+        }
+
+        /* Stamp */
+        .idcard-stamp {
+            position: relative;
+            width: 72px;
+            height: 72px;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .idcard-stamp:hover {
+            transform: scale(1.08) rotate(-5deg);
+        }
+
+        .idcard-stamp:active {
+            animation: stamp-press 0.4s ease;
+        }
+
+        @keyframes stamp-press {
+
+            0%,
+            100% {
+                transform: scale(1) rotate(0deg);
+            }
+
+            30% {
+                transform: scale(0.9) rotate(5deg);
+            }
+
+            60% {
+                transform: scale(1.1) rotate(-3deg);
+            }
+        }
+
+        .idcard-stamp-ring {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: 4px solid #F472B6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 3px 3px 0 rgba(244, 114, 182, 0.35), 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .idcard-stamp-inner {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: #10B981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        .idcard-stamp-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 9px;
+            font-weight: 800;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            line-height: 1.3;
+            text-align: center;
+        }
+
+        /* ===== Section 2: Statement ===== */
+        .about-statement {
+            background: #FDE68A;
+            border: 3.5px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 40px 48px;
+            position: relative;
+            margin-bottom: 40px;
+            text-align: left;
+            box-shadow: 6px 6px 0 #1a1a1a;
+        }
+
+        .about-statement-badge {
+            position: absolute;
+            top: -14px;
+            left: 24px;
+            background: #111;
+            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            padding: 5px 18px;
+            border-radius: 4px;
+            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .about-statement-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111;
+            line-height: 1.8;
+            display: inline;
+            min-height: 1.7em;
+            white-space: pre-wrap;
+        }
+
+        .typewriter-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.1em;
+            background: #1a1a1a;
+            margin-left: 2px;
+            vertical-align: text-bottom;
+            animation: blink-cursor 0.7s step-end infinite;
+        }
+
+        @keyframes blink-cursor {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* ===== Section 3: Vision ===== */
+        .about-vision {
+            text-align: center;
+            padding: 16px 0 0;
+            margin-bottom: 0;
+        }
+
+        .about-vision-primary {
+            font-size: 20px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #E11D48, #F472B6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .about-vision-secondary {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* ===== Original Sections ===== */
+        .about-section {
+            margin-bottom: 40px;
+        }
+
+        .about-section h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-left: 16px;
+            border-left: 4px solid;
+            border-image: linear-gradient(to bottom, #F472B6, #3B82F6) 1;
+        }
+
+        .about-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .mission-card {
+            background: var(--bg-white);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 28px 24px 24px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        }
+
+        .mission-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+        }
+
+        .mission-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+            border-color: transparent;
+        }
+
+        .mission-blue::before {
+            background: linear-gradient(90deg, #3B82F6, #60A5FA);
+        }
+
+        .mission-pink::before {
+            background: linear-gradient(90deg, #F472B6, #FB7299);
+        }
+
+        .mission-green::before {
+            background: linear-gradient(90deg, #10B981, #34D399);
+        }
+
+        .mission-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mission-card h3 span:first-child {
+            font-size: 22px;
+        }
+
+        .mission-card p {
+            font-size: 13px;
+            color: var(--text-sub);
+            line-height: 1.7;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .team-card {
+            background: var(--bg-white);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 28px 24px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        }
+
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #7B5CFF, #3B82F6);
+        }
+
+        .team-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .team-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #E9D5FF, #BFDBFE);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 12px;
+            box-shadow: 0 0 0 3px #fff, 0 0 0 5px #E9D5FF;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .team-card:hover .team-avatar {
+            transform: scale(1.1);
+            box-shadow: 0 0 0 3px #fff, 0 0 0 6px #C4B5FD;
+        }
+
+        .team-card h3 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .team-role {
+            font-size: 11px;
+            color: #7B5CFF;
+            font-weight: 700;
+            background: rgba(123, 92, 255, 0.08);
+            padding: 3px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            letter-spacing: 0.02em;
+        }
+
+        .team-card p {
+            font-size: 13px;
+            color: var(--text-sub);
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .contact-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-white);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 24px 16px;
+            transition: box-shadow 0.3s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease, border-color 0.3s ease;
+            color: var(--text-regular);
+            font-size: 13px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            transition: height 0.3s ease;
+        }
+
+        .contact-card:hover::after {
+            height: 4px;
+        }
+
+        .contact-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .contact-bilibili::after {
+            background: #00AEEC;
+        }
+
+        .contact-bilibili:hover {
+            border-color: #00AEEC;
+            background: #F0FAFF;
+        }
+
+        .contact-douyin::after {
+            background: #111;
+        }
+
+        .contact-douyin:hover {
+            border-color: #333;
+            background: #F8F8F8;
+        }
+
+        .contact-xhs::after {
+            background: #FF2442;
+        }
+
+        .contact-xhs:hover {
+            border-color: #FF2442;
+            background: #FFF5F7;
+        }
+
+        .contact-wechat::after {
+            background: #07C160;
+        }
+
+        .contact-wechat:hover {
+            border-color: #07C160;
+            background: #F0FFF5;
+        }
+
+        .contact-emoji {
+            font-size: 32px;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .contact-card:hover .contact-emoji {
+            transform: scale(1.25) rotate(-5deg);
+        }
+
+        /* ===== Join Us Section ===== */
+        .join-us-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .join-card {
+            background: #fff;
+            border: 2px solid #1a1a1a;
+            border-radius: 16px;
+            padding: 32px 24px;
+            position: relative;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+            box-shadow: 6px 6px 0 #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow: hidden;
+        }
+
+        .join-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 8px 14px 0 rgba(26, 26, 26, 0.2);
+            border-color: #3B82F6;
+        }
+
+        .join-card.art:hover {
+            border-color: #F472B6;
+        }
+
+        .join-card.tech:hover {
+            border-color: #3B82F6;
+        }
+
+        .join-card.video:hover {
+            border-color: #10B981;
+        }
+
+        .join-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: #1a1a1a;
+            border-radius: 14px 14px 0 0;
+        }
+
+        /* Mask Layer for Art Card's Header Bar */
+        .card-mask-layer {
+            position: absolute;
+            inset: 0;
+            border-radius: 14px;
+            /* Inner radius */
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+            /* Below content and 3D scene */
+        }
+
+        .card-mask-layer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: #F472B6;
+        }
+
+        .join-card.art::before {
+            display: none;
+        }
+
+        .join-card.tech::before {
+            background: #3B82F6;
+        }
+
+        .join-card.video::before {
+            background: #10B981;
+        }
+
+        .join-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .join-card-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #111;
+            margin-bottom: 4px;
+        }
+
+        .join-card-subtitle {
+            font-size: 12px;
+            color: #666;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .join-card-icon {
+            font-size: 32px;
+            line-height: 1;
+        }
+
+        .join-card-slogans {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .join-tag {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: #f0f0f0;
+            color: #555;
+            border: 1px solid transparent;
+        }
+
+        .join-card.art .join-tag {
+            background: #FCE8EF;
+            color: #D13576;
+        }
+
+        .join-card.tech .join-tag {
+            background: #E0F2FE;
+            color: #0284C7;
+        }
+
+        .join-card.video .join-tag {
+            background: #DCFCE7;
+            color: #16A34A;
+        }
+
+        .join-card-desc {
+            font-size: 14px;
+            color: #444;
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        .join-btn {
+            margin-top: auto;
+            align-self: flex-start;
+            padding: 10px 24px;
+            background: #1a1a1a;
+            color: #fff;
+            font-weight: 700;
+            font-size: 13px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .join-btn:hover {
+            background: #333;
+            transform: scale(1.02);
+        }
+
+        /* ===== Art Department 3D Animation ===== */
+        .join-card.art {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            /* Ensure overflow is visible so 3D elements can pop out */
+            overflow: visible;
+        }
+
+        .join-card-content {
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            opacity: 1;
+            /* Ensure content is above background initially */
+            z-index: 2;
+            position: relative;
+        }
+
+        .join-card.art .join-card-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            /* Ensure it fills the card height */
+            height: 100%;
+            gap: 20px;
+            /* Match .join-card gap */
+            /* Remove stacking context so button z-index works at card level */
+            z-index: auto;
+        }
+
+        .join-card.art .join-card-text-wrapper {
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            opacity: 1;
+            /* Mimic card layout internally */
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .join-card.art.active .join-card-text-wrapper {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.95);
+        }
+
+        /* Ensure button stays visible and clickable */
+        .art-join-btn {
+            position: relative;
+            z-index: 20;
+            /* Above foreground */
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        /* Move button slightly down or adjust when active if needed? 
+           For now, keep it in place but ensure z-index. */
+
+
+        /* The 3D Scene Container */
+        .art-3d-scene {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .art-background,
+        .art-foreground {
+            position: absolute;
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+        }
+
+        /* Background Image: Acts as the "card" base */
+        .art-background {
+            /* Adjust size to fill or cover appropriately */
+            width: 120%;
+            height: auto;
+            transform: translateZ(-50px) scale(0.8);
+            z-index: 1;
+        }
+
+        .join-card.art.active .art-background {
+            opacity: 1;
+            transform: translateZ(0) scale(1.1);
+            /* Slight overscale correctly */
+        }
+
+        /* Foreground Image: The character popping out */
+        .art-foreground {
+            width: 100%;
+            /* Adjust based on image ratio */
+            height: auto;
+            transform: translateZ(0) translateY(100px) scale(0.8);
+            z-index: 5;
+            filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.4));
+        }
+
+        .join-card.art.active .art-foreground {
+            opacity: 1;
+            transform: translateZ(60px) translateY(-20px) scale(1.3);
+            /* Pop out dramatically */
+        }
+
+        /* Optional: Hide the white card background when active to let art-bg take over? */
+        .join-card.art.active {
+            background: transparent;
+            border-color: transparent;
+            box-shadow: none;
+        }
+
+        .join-card.art.active::before {
+            opacity: 0;
+        }
+
+        /* ===== Responsive: Tablet ===== */
+        @media (max-width: 960px) and (min-width: 721px) {
+            .about-welcome {
+                gap: 32px;
+            }
+
+            .about-idcard-wrapper {
+                width: 320px;
+            }
+
+            .about-idcard {
+                width: 320px;
+            }
+
+            .mission-grid,
+            .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .join-us-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .join-us-grid .join-card:last-child {
+                grid-column: 1 / -1;
+            }
+        }
+
+        /* ===== Responsive: Mobile ===== */
+        @media (max-width: 720px) {
+            .about-welcome {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .about-idcard-wrapper {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
+
+            .about-idcard {
+                width: 340px;
+            }
+
+            .about-welcome-title,
+            .about-welcome-name {
+                font-size: 32px;
+            }
+
+            .about-statement {
+                padding: 28px 24px;
+            }
+
+            .about-statement-text {
+                font-size: 17px;
+            }
+
+            .about-page {
+                padding: 72px 20px 48px;
+            }
+
+            .mission-grid,
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .idcard-body {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .idcard-fields {
+                width: 100%;
+            }
+
+            .join-us-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-section h2 {
+                font-size: 18px;
+            }
+        }
+
+        /* ===== Scroll Reveal Animations ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .reveal-delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .reveal-delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        .reveal-delay-4 {
+            transition-delay: 0.4s;
+        }
+
+        /* ===== Decorative HR ===== */
+        .about-divider {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--border) 20%, #F472B6 50%, var(--border) 80%, transparent);
+            margin: 48px 0;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+
+<body data-page="about">
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="navbar-brand">
+            <img class="brand-icon" src="img/梧桐树.png" alt="梧桐树">
+            <span>梧桐树 ai</span>
+        </a>
+        <div class="navbar-search">
+            <input type="text" placeholder="搜索提示词、教程..." />
+            <button>🔍</button>
+        </div>
+        <div class="navbar-tabs" id="navbar-tabs">
+            <a href="index.html" id="nav-home">首页</a>
+            <a href="vlog.html" id="nav-vlog">🎬 Vlog</a>
+            <a href="prompts.html" id="nav-prompts">🔥 爆火提示词</a>
+            <a href="class.html" id="nav-class">📚 学习班</a>
+            <a href="about.html" class="active" id="nav-about">👥 关于我们</a>
+        </div>
+        <div class="navbar-right">
+            <a href="https://space.bilibili.com/" target="_blank" title="Bilibili">📺</a>
+            <a href="https://www.douyin.com/" target="_blank" title="抖音">🎵</a>
+            <a href="https://www.xiaohongshu.com/" target="_blank" title="小红书">📕</a>
+        </div>
+        <button class="navbar-toggle" id="navbar-toggle" aria-label="菜单">☰</button>
+    </nav>
+
+    <!-- About Page -->
+    <div class="about-page">
+
+        <!-- ======== Section 1: Welcome + ID Card ======== -->
+        <div class="about-welcome reveal">
+            <div class="about-intro">
+                <div class="about-welcome-title">Welcome to</div>
+                <div class="about-welcome-name">吴桐的世界！</div>
+
+                <div class="about-bio">
+                    <p>关于我，我的名字叫吴桐（WuTong），三年设计经验，鉴于对自己的认知和兴趣，目前定位自己是 AI 设计师，正在往成为一名前沿 AI 独立开发者的路上努力。</p>
+                    <p>目前 Base 长沙。暑假曾在南墙老师的AI公司实习（疯狂贴金🤓）</p>
+                </div>
+
+                <div class="about-bio">
+                    <p>现在我主要的工作是运营工作室，打比赛、做项目和自媒体~~~</p>
+                </div>
+            </div>
+
+            <!-- ===== ID CARD ===== -->
+            <div class="about-idcard-wrapper">
+                <div class="about-idcard">
+                    <!-- Pink badge -->
+                    <div class="idcard-pink-badge">
+                        <span class="smiley">☺</span>
+                        <span class="badge-name">WUTONG</span>
+                    </div>
+
+                    <!-- Green header -->
+                    <div class="idcard-header">
+                        <div class="idcard-header-title">ID CARD</div>
+                        <div class="idcard-header-sub">AI DESIGN & DEVELOPMENT</div>
+                    </div>
+
+                    <!-- Body: photo + fields -->
+                    <div class="idcard-body">
+                        <div class="idcard-left">
+                            <div class="idcard-photo">
+                                <img src="img/avatar.jpg" alt="我的头像">
+                            </div>
+                            <div class="idcard-tags">
+                                <span class="idcard-tag">2005.08.XX</span>
+                                <span class="idcard-tag blue">长沙</span>
+                            </div>
+                        </div>
+
+                        <div class="idcard-fields">
+                            <div class="idcard-field yellow">
+                                <div class="idcard-field-label">Name</div>
+                                <div class="idcard-field-value">吴桐</div>
+                            </div>
+                            <div class="idcard-field blue">
+                                <div class="idcard-field-label">Role</div>
+                                <div class="idcard-field-value">AI 设计师</div>
+                            </div>
+                            <div class="idcard-field purple">
+                                <div class="idcard-field-label">Work</div>
+                                <div class="idcard-field-value">独立开发者</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom: ID + barcode + stamp -->
+                    <div class="idcard-bottom">
+                        <div class="idcard-bottom-left">
+                            <div class="idcard-id-label">ID No.</div>
+                            <div class="idcard-id-value">WT-20050800-OVO</div>
+                            <!-- Barcode -->
+                            <div class="idcard-barcode" id="idcard-barcode"></div>
+                        </div>
+                        <div class="idcard-stamp">
+                            <div class="idcard-stamp-ring">
+                                <div class="idcard-stamp-inner">
+                                    <span class="idcard-stamp-text">OFFICIAL<br>VIBE</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======== Section 2: Statement ======== -->
+        <div class="about-statement reveal">
+            <span class="about-statement-badge">STATEMENT</span>
+            <span class="about-statement-text" id="typewriter-text" data-text="作为一名从2023年高考就接触AI的设计学生，我越来越深刻地感受到：
+AI的飞速发展对社会是巨大的进步，却对我们这一代大学生异常残酷。
+我们失去了安静可靠的环境，去沉下心学习那些枯燥却扎实的理论知识。
+越来越多的人满足于做“垃圾搬运工”：复制粘贴提示词，让AI替自己思考、写作、决策。
+技术强者用AI放大优势，资本拥有者用AI降低成本，
+而我们——本该在试错、实习、反复打磨中成长的大学生——却在AI的便捷中渐渐丧失了真正独立思考和创造的能力。
+我越擅长使用AI，我的实际设计能力却越退步。
+我渴望一个乌托邦：
+让AI真正成为工具，而非思维的替代品；
+让我们能安心、专注地学习真正的知识，
+在扎实的基础上，再驾驭AI，而不是被AI驾驭。
+——愿我们守住学习的初心，在AI时代依然拥有属于自己的成长。"></span><span class="typewriter-cursor" id="typewriter-cursor"></span>
+        </div>
+
+        <!-- ======== Section 3: Vision ======== -->
+        <div class="about-vision reveal">
+            <p class="about-vision-primary">人脑优先</p>
+            <p class="about-vision-secondary">不知道 3年 5年 10年后的我会成为什么样的人，过上什么样的生活呢？</p>
+        </div>
+
+        <!-- Divider -->
+        <hr class="about-divider" />
+
+        <!-- 我们的使命 -->
+        <div class="about-section reveal">
+            <h2><span class="about-icon" style="background:#e8f4fd;">🎯</span> 我们的使命</h2>
+            <div class="mission-grid">
+                <div class="mission-card mission-blue reveal reveal-delay-1">
+                    <h3><span>📖</span> <span>拆解</span></h3>
+                    <p>拆解全网最火的AI作品，像机器一样精准复刻每一个提示词、每一步参数，提取那些真正决定成败的核心技巧</p>
+                </div>
+                <div class="mission-card mission-pink reveal reveal-delay-2">
+                    <h3><span>💡</span> <span>理解</span></h3>
+                    <p>看懂为什么要这样做，看清背后的结构、逻辑与约束。<br>同样的框架，不同的内容；<br>同样的方法，不同的表达。</p>
+                </div>
+                <div class="mission-card mission-green reveal reveal-delay-3">
+                    <h3><span>✨</span> <span>再造</span></h3>
+                    <p>在扎实的基础上，注入你的原创意志。 分析爆款为何爆款，再举一反三，驾驭AI创造出独一无二的作品</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 团队成员 -->
+        <div class="about-section reveal">
+            <h2><span class="about-icon" style="background:#f3e8ff;">💜</span> 团队成员</h2>
+            <div class="team-grid">
+                <div class="team-card reveal reveal-delay-1">
+                    <div class="team-avatar">👨‍💻</div>
+                    <h3>站长</h3>
+                    <span class="team-role">创始人 · 内容策划</span>
+                    <p>全栈创作者，负责案例发掘和提示词拆解，热爱用 AI 创作内容</p>
+                </div>
+                <div class="team-card reveal reveal-delay-2">
+                    <div class="team-avatar">🎨</div>
+                    <h3>设计师小助手</h3>
+                    <span class="team-role">视觉设计</span>
+                    <p>负责网站视觉和案例封面设计，让每个案例都有最好的呈现</p>
+                </div>
+                <div class="team-card reveal reveal-delay-3">
+                    <div class="team-avatar">📡</div>
+                    <h3>AI 探索官</h3>
+                    <span class="team-role">内容运营</span>
+                    <p>持续跟踪 AI 新动态，第一时间拆解爆火案例分享给大家</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 联系我们 -->
+        <div class="about-section reveal">
+            <h2><span class="about-icon" style="background:#fce8ef;">💌</span> 联系我们</h2>
+            <p>欢迎通过以下平台关注我们，获取最新 AI 提示词教程和案例拆解：</p>
+            <div class="contact-grid">
+                <a href="https://space.bilibili.com/" target="_blank"
+                    class="contact-card contact-bilibili reveal reveal-delay-1">
+                    <span class="contact-emoji">📺</span>
+                    <span>Bilibili</span>
+                </a>
+                <a href="https://www.douyin.com/" target="_blank"
+                    class="contact-card contact-douyin reveal reveal-delay-2">
+                    <span class="contact-emoji">🎵</span>
+                    <span>抖音</span>
+                </a>
+                <a href="https://www.xiaohongshu.com/" target="_blank"
+                    class="contact-card contact-xhs reveal reveal-delay-3">
+                    <span class="contact-emoji">📕</span>
+                    <span>小红书</span>
+                </a>
+                <a href="#" class="contact-card contact-wechat reveal reveal-delay-4">
+                    <span class="contact-emoji">💬</span>
+                    <span>微信公众号</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- 加入我们 -->
+        <div class="about-section about-join-us reveal">
+            <h2><span class="about-icon" style="background:#fff1f2;">🤝</span> 加入我们</h2>
+            <div class="join-us-grid">
+                <!-- 美工部 -->
+                <div class="join-card art">
+                    <!-- New Mask Layer for Header Bar to fix overflow clipping -->
+                    <div class="card-mask-layer"></div>
+                    <div class="join-card-content">
+                        <div class="join-card-text-wrapper">
+                            <div class="join-card-header">
+                                <div>
+                                    <div class="join-card-title">美工部</div>
+                                    <div class="join-card-subtitle">ART DEPARTMENT</div>
+                                </div>
+                                <div class="join-card-icon">🎨</div>
+                            </div>
+                            <div class="join-card-slogans">
+                                <span class="join-tag">感受时代脉搏</span>
+                                <span class="join-tag">品味时尚</span>
+                                <span class="join-tag">艺绘蓝图</span>
+                            </div>
+                            <p class="join-card-desc">
+                                美工部主导web设计，移动端设计，印刷品设计工作，同时承接校内外大型活动视觉设计工作。灵活配合各部门工作，为讲好品牌故事献出重要力量。在这里，你将触摸色彩的脉搏，品味最前沿的审美风潮，最新鲜的设计资讯，欢迎大家来与我们一同体会设计之美!
+                            </p>
+                        </div>
+                        <!-- Updated: Hover triggers 3D, Click triggers Badge -->
+                        <a href="#" class="join-btn art-join-btn"
+                            onmouseenter="this.closest('.join-card.art').classList.add('active')"
+                            onmouseleave="this.closest('.join-card.art').classList.remove('active')"
+                            onclick="event.preventDefault(); openBadgeModal();">申请加入 →</a>
+                    </div>
+
+                    <!-- 3D Scene -->
+                    <div class="art-3d-scene">
+                        <img src="img/背景.png" class="art-background" alt="Background">
+                        <img src="img/前景.png" class="art-foreground" alt="Foreground">
+                    </div>
+                </div>
+
+                <!-- 技术部 -->
+                <div class="join-card tech">
+                    <div class="join-card-header">
+                        <div>
+                            <div class="join-card-title">技术部</div>
+                            <div class="join-card-subtitle">TECH DEPARTMENT</div>
+                        </div>
+                        <div class="join-card-icon">💻</div>
+                    </div>
+                    <div class="join-card-slogans">
+                        <span class="join-tag">把握时代力量</span>
+                        <span class="join-tag">以技之长</span>
+                        <span class="join-tag">智控生活</span>
+                    </div>
+                    <p class="join-card-desc">
+                        技术部致力于网站的设计开发，服务器与网站的运行维护。历年来帮助各学院，社团，校内机构搭建了数十个网站。从亲手开发小程序，到和全国的技术大佬一起切磋交流。技术部以扎实的技术水平和坚持不懈的探索精神邀游在代码的海洋中，提升最核心的竞争力。
+                    </p>
+                    <a href="#" class="join-btn" onclick="event.preventDefault(); openBadgeModal();">申请加入 →</a>
+                </div>
+
+                <!-- 视频部 -->
+                <div class="join-card video">
+                    <div class="join-card-header">
+                        <div>
+                            <div class="join-card-title">视频部</div>
+                            <div class="join-card-subtitle">VIDEO DEPARTMENT</div>
+                        </div>
+                        <div class="join-card-icon">📹</div>
+                    </div>
+                    <div class="join-card-slogans">
+                        <span class="join-tag">捕捉时代影像</span>
+                        <span class="join-tag">随心而动</span>
+                        <span class="join-tag">留影无声</span>
+                    </div>
+                    <p class="join-card-desc">
+                        视频部负责访谈制作，微电影，特效短片，校园新闻摄影，大型晚会导播等。用镜头雕刻时光，用画面讲述故事。加入视频部，你将掌握最专业的拍摄技巧，最酷炫的后期剪辑，与志同道合的伙伴一起，用光影记录青春，用创意点亮生活。
+                    </p>
+                    <a href="#" class="join-btn" onclick="event.preventDefault(); openBadgeModal();">申请加入 →</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    梧桐树 ai
+                    <span>© 2026 All rights reserved.</span>
+                </div>
+                <div class="footer-links">
+                    <a href="https://space.bilibili.com/" target="_blank">📺 Bilibili</a>
+                    <a href="https://www.douyin.com/" target="_blank">🎵 抖音</a>
+                    <a href="https://www.xiaohongshu.com/" target="_blank">📕 小红书</a>
+                </div>
+            </div>
+        </footer>
+
+        <button class="back-to-top" id="back-to-top" aria-label="返回顶部">↑</button>
+        <div class="toast" id="toast"></div>
+
+        <script src="js/data.js"></script>
+        <script src="js/clipboard.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            // Generate barcode bars
+            (function () {
+                var bc = document.getElementById('idcard-barcode');
+                if (!bc) return;
+                var pattern = [3, 1, 2, 1, 3, 2, 1, 1, 2, 3, 1, 2, 1, 1, 3, 1, 2, 1, 2, 1, 3, 1, 1, 2, 1, 3, 2, 1, 1, 2, 3, 1];
+                for (var i = 0; i < pattern.length; i++) {
+                    var bar = document.createElement('span');
+                    var h = 14 + pattern[i] * 6;
+                    bar.style.height = h + 'px';
+                    bar.style.width = (pattern[i] > 2 ? '3px' : pattern[i] > 1 ? '2px' : '1.5px');
+                    bc.appendChild(bar);
+                }
+            })();
+
+            // Typewriter effect for Statement section
+            (function () {
+                var el = document.getElementById('typewriter-text');
+                if (!el) return;
+                var fullText = el.getAttribute('data-text');
+                var charIndex = 0;
+                var started = false;
+
+                function typeNextChar() {
+                    if (charIndex <= fullText.length) {
+                        el.textContent = fullText.slice(0, charIndex);
+                        charIndex++;
+                        // Faster typing for long text
+                        setTimeout(typeNextChar, 30 + Math.random() * 40);
+                    }
+                }
+
+                // Use IntersectionObserver to start when scrolled into view
+                if ('IntersectionObserver' in window) {
+                    var observer = new IntersectionObserver(function (entries) {
+                        entries.forEach(function (entry) {
+                            if (entry.isIntersecting && !started) {
+                                started = true;
+                                setTimeout(typeNextChar, 400);
+                                observer.disconnect();
+                            }
+                        });
+                    }, { threshold: 0.5 });
+                    observer.observe(el.closest('.about-statement'));
+                } else {
+                    // Fallback: start after delay
+                    started = true;
+                    setTimeout(typeNextChar, 800);
+                }
+            })();
+
+            // Scroll Reveal Animation
+            (function () {
+                if (!('IntersectionObserver' in window)) {
+                    // Fallback: show everything
+                    document.querySelectorAll('.reveal').forEach(function (el) {
+                        el.classList.add('visible');
+                    });
+                    return;
+                }
+
+                var revealObserver = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            revealObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+                document.querySelectorAll('.reveal').forEach(function (el) {
+                    revealObserver.observe(el);
+                });
+            })();
+        </script>
+        <!-- Badge Overlay (Hidden by default) -->
+        <div id="badge-overlay" class="badge-overlay" onclick="closeBadgeModal(event)">
+            <div class="badge-lanyard" onclick="event.stopPropagation()">
+                <div class="strap"></div>
+                <div class="clip">
+                    <div class="clip-hole"></div>
+                </div>
+                <div class="badge">
+                    <button class="badge-x" onclick="closeBadgeModal()">✕</button>
+                    <div class="badge-top">
+                        <div class="badge-brand">梧桐树 ai</div>
+                        <div class="badge-sep"></div>
+                        <div class="badge-type">CREATOR ACCESS</div>
+                    </div>
+                    <div class="badge-center">
+                        <img src="img/站主二维码.png" alt="QR Code" class="badge-qr" />
+                        <div class="badge-hint">扫描二维码加入社群</div>
+                    </div>
+                    <div class="badge-bottom">
+                        <input type="email" id="badge-email" class="badge-email" placeholder="你的 QQ 邮箱" />
+                        <button class="badge-btn" id="badge-submit" onclick="submitBadgeEmail()">加入</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scattered Mascot Container (Background) -->
+            <div id="mascot-container" class="mascot-container"></div>
+        </div>
+
+        <!-- Escape Key Listener for about page -->
+        <script>
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    var o = document.getElementById('badge-overlay');
+                    if (o && o.classList.contains('active')) closeBadgeModal();
+                }
+            });
+        </script>
+</body>
+
+</html>
+```

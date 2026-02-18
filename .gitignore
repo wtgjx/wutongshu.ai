@@ -1,0 +1,20 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Agent config (not needed on server)
+.agent/
+.gemini/
+
+# Dev scripts (optional - uncomment if you don't want these on GitHub)
+# create_placeholders.py
+# create_theme_images.py
+# process_animation.py
