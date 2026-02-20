@@ -25,44 +25,110 @@
 
     <!-- ========== Admin Panel ========== -->
     <div class="admin-container" id="admin-panel">
-        <!-- Header -->
-        <div class="admin-header">
-            <h1>
+
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-logo">
                 <img src="img/梧桐树.png" alt="logo">
-                梧桐树 ai · 管理后台
-            </h1>
-            <div class="admin-header-actions">
-                <span class="data-status" id="data-status"></span>
-                <button class="btn btn-danger" onclick="confirmReset()">🗑️ 恢复默认</button>
-                <button class="btn" onclick="window.location.href='index.html'">↗ 查看网站</button>
-                <button class="btn" onclick="doLogout()">退出</button>
+                <div>
+                    <span>梧桐树 ai</span>
+                    <span class="logo-sub">内容管理后台</span>
+                </div>
             </div>
-        </div>
 
-        <!-- Tabs -->
-        <div class="admin-tabs" id="admin-tabs">
-            <button class="admin-tab active" data-cat="vlog">
-                🎬 Vlog 展示<span class="tab-count" id="count-vlog">0</span>
-            </button>
-            <button class="admin-tab" data-cat="viral-prompts">
-                🔥 爆火提示词<span class="tab-count" id="count-viral-prompts">0</span>
-            </button>
-            <button class="admin-tab" data-cat="ai-class">
-                📚 AI 学习班<span class="tab-count" id="count-ai-class">0</span>
-            </button>
-        </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-section-label">内容管理</div>
+                <div class="sidebar-item active" data-cat="vlog">
+                    <span class="item-icon">🎬</span>
+                    Vlog 展示
+                    <span class="item-count" id="count-vlog">0</span>
+                </div>
+                <div class="sidebar-item" data-cat="viral-prompts">
+                    <span class="item-icon">🔥</span>
+                    爆火提示词
+                    <span class="item-count" id="count-viral-prompts">0</span>
+                </div>
+                <div class="sidebar-item" data-cat="ai-class">
+                    <span class="item-icon">📚</span>
+                    AI 学习班
+                    <span class="item-count" id="count-ai-class">0</span>
+                </div>
+            </nav>
 
-        <!-- Toolbar -->
-        <div style="display:flex; justify-content:flex-end; margin-bottom:16px;">
-            <button class="btn btn-primary" onclick="openEditorForNew()">＋ 新增内容</button>
-        </div>
+            <div class="sidebar-footer">
+                <div class="sidebar-item" onclick="window.open('index.html','_blank')">
+                    <span class="item-icon">↗</span>
+                    查看网站
+                </div>
+                <div class="sidebar-item" onclick="confirmReset()">
+                    <span class="item-icon">🗑️</span>
+                    恢复默认数据
+                </div>
+                <div class="sidebar-item" onclick="doLogout()">
+                    <span class="item-icon">🚪</span>
+                    退出登录
+                </div>
+            </div>
+        </aside>
 
-        <!-- Content List -->
-        <div class="content-list" id="content-list"></div>
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Top Bar -->
+            <div class="main-topbar">
+                <h1><span class="topbar-emoji" id="topbar-emoji">🎬</span><span id="topbar-title">Vlog 展示</span></h1>
+                <div class="topbar-actions">
+                    <span class="data-status" id="data-status"></span>
+                </div>
+            </div>
+
+            <!-- Dashboard Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value" id="stat-total">0</div>
+                    <div class="stat-label">总内容数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🎬</div>
+                    <div class="stat-value" id="stat-vlog">0</div>
+                    <div class="stat-label">Vlog 展示</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-value" id="stat-prompts">0</div>
+                    <div class="stat-label">爆火提示词</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📚</div>
+                    <div class="stat-value" id="stat-class">0</div>
+                    <div class="stat-label">AI 学习班</div>
+                </div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="content-toolbar">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="搜索标题或标签..." oninput="renderList()" />
+                </div>
+                <select class="sort-select" id="sort-select" onchange="renderList()">
+                    <option value="date-desc">按日期 ↓</option>
+                    <option value="date-asc">按日期 ↑</option>
+                    <option value="views-desc">按播放量 ↓</option>
+                    <option value="copies-desc">按复制量 ↓</option>
+                    <option value="title-asc">按标题 A-Z</option>
+                </select>
+                <div class="toolbar-spacer"></div>
+                <button class="btn btn-primary" onclick="openEditorForNew()">＋ 新增内容</button>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="content-grid" id="content-list"></div>
+        </main>
     </div>
 
-    <!-- ========== Editor Modal ========== -->
+    <!-- ========== Editor Slide-in ========== -->
     <div class="editor-overlay" id="editor-overlay">
+        <div class="editor-backdrop" onclick="closeEditor()"></div>
         <div class="editor-panel">
             <div class="editor-header">
                 <h2 id="editor-title">编辑内容</h2>
@@ -90,7 +156,10 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">封面图 URL</label>
-                    <input class="form-input" id="f-cover" placeholder="https://..." />
+                    <input class="form-input" id="f-cover" placeholder="https://..." oninput="updateCoverPreview()" />
+                    <div class="cover-preview-wrapper">
+                        <img class="cover-preview" id="cover-preview" alt="封面预览" />
+                    </div>
                 </div>
                 <div class="form-row-3">
                     <div class="form-group">
@@ -147,8 +216,11 @@
                 </div>
             </div>
             <div class="editor-footer">
-                <button class="btn" onclick="closeEditor()">取消</button>
-                <button class="btn btn-primary" onclick="saveItem()">💾 保存</button>
+                <div class="shortcut-hint"><kbd>Ctrl</kbd> + <kbd>S</kbd> 快速保存</div>
+                <div class="editor-footer-actions">
+                    <button class="btn" onclick="closeEditor()">取消</button>
+                    <button class="btn btn-primary" onclick="saveItem()">💾 保存</button>
+                </div>
             </div>
         </div>
     </div>
@@ -156,21 +228,40 @@
     <!-- Toast -->
     <div class="toast" id="toast"></div>
 
+    <!-- Confirm Dialog -->
+    <div class="confirm-overlay" id="confirm-overlay">
+        <div class="confirm-card">
+            <div class="confirm-icon" id="confirm-icon">⚠️</div>
+            <h3 id="confirm-title">确认操作</h3>
+            <p id="confirm-msg">确定要执行此操作吗？</p>
+            <div class="confirm-actions">
+                <button class="btn" onclick="closeConfirm()">取消</button>
+                <button class="btn btn-danger" id="confirm-ok-btn" onclick="confirmOk()">确认</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="js/data.js"></script>
     <script>
         // ============================================
-        // Admin Panel Logic
+        // Admin Panel v2 — Enhanced Logic
         // ============================================
 
         var ADMIN_PWD = 'wutong2025';
         var currentCategory = 'vlog';
-        var editingId = null; // null = new item
+        var editingId = null;
         var stepCount = 0;
+        var confirmCallback = null;
+
+        var categoryMeta = {
+            'vlog': { emoji: '🎬', label: 'Vlog 展示' },
+            'viral-prompts': { emoji: '🔥', label: '爆火提示词' },
+            'ai-class': { emoji: '📚', label: 'AI 学习班' }
+        };
 
         // ---------- Authentication ----------
 
-        // Check session
         (function () {
             if (sessionStorage.getItem('admin_auth') === '1') {
                 showPanel();
@@ -203,30 +294,51 @@
         function showPanel() {
             document.getElementById('login-gate').style.display = 'none';
             document.getElementById('admin-panel').classList.add('active');
-            refreshTabs();
-            renderList();
-            updateStatus();
+            refreshAll();
         }
 
-        // ---------- Tabs ----------
+        // ---------- Sidebar Navigation ----------
 
-        document.getElementById('admin-tabs').addEventListener('click', function (e) {
-            var tab = e.target.closest('.admin-tab');
-            if (!tab) return;
-            document.querySelectorAll('.admin-tab').forEach(function (t) { t.classList.remove('active'); });
-            tab.classList.add('active');
-            currentCategory = tab.dataset.cat;
+        document.querySelector('.sidebar-nav').addEventListener('click', function (e) {
+            var link = e.target.closest('.sidebar-item');
+            if (!link || !link.dataset.cat) return;
+
+            document.querySelectorAll('.sidebar-nav .sidebar-item').forEach(function (i) { i.classList.remove('active'); });
+            link.classList.add('active');
+            currentCategory = link.dataset.cat;
+
+            // Update top bar
+            var meta = categoryMeta[currentCategory];
+            document.getElementById('topbar-emoji').textContent = meta.emoji;
+            document.getElementById('topbar-title').textContent = meta.label;
+
             renderList();
         });
 
-        function refreshTabs() {
+        // ---------- Refresh All ----------
+
+        function refreshAll() {
             var data = loadContentData();
+
+            // Sidebar counts
             var cats = ['vlog', 'viral-prompts', 'ai-class'];
             cats.forEach(function (cat) {
                 var count = data.filter(function (d) { return d.category === cat; }).length;
                 var el = document.getElementById('count-' + cat);
                 if (el) el.textContent = count;
             });
+
+            // Dashboard stats
+            document.getElementById('stat-total').textContent = data.length;
+            document.getElementById('stat-vlog').textContent = data.filter(function (d) { return d.category === 'vlog'; }).length;
+            document.getElementById('stat-prompts').textContent = data.filter(function (d) { return d.category === 'viral-prompts'; }).length;
+            document.getElementById('stat-class').textContent = data.filter(function (d) { return d.category === 'ai-class'; }).length;
+
+            // Status badge
+            updateStatus();
+
+            // Content list
+            renderList();
         }
 
         function updateStatus() {
@@ -245,26 +357,63 @@
         function renderList() {
             var data = loadContentData();
             var items = data.filter(function (d) { return d.category === currentCategory; });
+
+            // Search filter
+            var query = (document.getElementById('search-input').value || '').toLowerCase().trim();
+            if (query) {
+                items = items.filter(function (item) {
+                    var inTitle = item.title.toLowerCase().indexOf(query) !== -1;
+                    var inTags = item.tags && item.tags.some(function (t) { return t.toLowerCase().indexOf(query) !== -1; });
+                    var inDesc = item.opening && item.opening.summary && item.opening.summary.toLowerCase().indexOf(query) !== -1;
+                    return inTitle || inTags || inDesc;
+                });
+            }
+
+            // Sort
+            var sortVal = document.getElementById('sort-select').value;
+            items.sort(function (a, b) {
+                switch (sortVal) {
+                    case 'date-desc': return (b.date || '').localeCompare(a.date || '');
+                    case 'date-asc': return (a.date || '').localeCompare(b.date || '');
+                    case 'views-desc': return (b.views || 0) - (a.views || 0);
+                    case 'copies-desc': return (b.copies || 0) - (a.copies || 0);
+                    case 'title-asc': return (a.title || '').localeCompare(b.title || '');
+                    default: return 0;
+                }
+            });
+
             var container = document.getElementById('content-list');
 
             if (items.length === 0) {
-                container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>这个栏目还没有内容</p><p>点击上方「新增内容」开始创建</p></div>';
+                var msg = query ? '没有匹配「' + escapeHtml(query) + '」的结果' : '这个栏目还没有内容';
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">' + (query ? '🔍' : '📭') + '</div>'
+                    + '<p>' + msg + '</p>'
+                    + (query ? '' : '<p style="margin-top:4px;font-size:13px">点击上方「＋ 新增内容」开始创建</p>') + '</div>';
                 return;
             }
 
             container.innerHTML = items.map(function (item) {
-                return '<div class="content-item" onclick="openEditor(\'' + item.id + '\')">'
-                    + '<img class="content-item-cover" src="' + (item.cover || '') + '" alt="" onerror="this.style.display=\'none\'">'
-                    + '<div class="content-item-info">'
-                    + '<div class="content-item-title">' + escapeHtml(item.title) + '</div>'
-                    + '<div class="content-item-meta">'
-                    + '<span>' + item.date + '</span>'
-                    + '<span>' + item.author + '</span>'
-                    + '<span>' + (item.main && item.main.steps ? item.main.steps.length : 0) + ' 个步骤</span>'
-                    + '</div></div>'
-                    + '<div class="content-item-actions">'
-                    + '<button class="btn btn-sm btn-danger" onclick="event.stopPropagation(); deleteItem(\'' + item.id + '\')">删除</button>'
-                    + '</div></div>';
+                var desc = item.opening ? item.opening.summary : '';
+                var tags = (item.tags || []).slice(0, 3).map(function (t) { return '<span class="tag">' + escapeHtml(t) + '</span>'; }).join('');
+                var stepsCount = item.main && item.main.steps ? item.main.steps.length : 0;
+
+                return '<div class="content-card" onclick="openEditor(\'' + item.id + '\')">'
+                    + '<div class="content-card-actions">'
+                    + '<button class="card-action-btn" onclick="event.stopPropagation(); duplicateItem(\'' + item.id + '\')" title="复制">📋</button>'
+                    + '<button class="card-action-btn delete-btn" onclick="event.stopPropagation(); deleteItem(\'' + item.id + '\')" title="删除">🗑️</button>'
+                    + '</div>'
+                    + '<img class="content-card-cover" src="' + (item.cover || '') + '" alt="" onerror="this.style.background=\'var(--surface-2)\';this.style.minHeight=\'120px\'" />'
+                    + '<div class="content-card-body">'
+                    + '<div class="content-card-title">' + escapeHtml(item.title) + '</div>'
+                    + (desc ? '<div class="content-card-desc">' + escapeHtml(desc) + '</div>' : '')
+                    + (tags ? '<div class="content-card-tags">' + tags + '</div>' : '')
+                    + '<div class="content-card-meta">'
+                    + '<span>📅 ' + (item.date || '—') + '</span>'
+                    + '<span>👤 ' + escapeHtml(item.author || '—') + '</span>'
+                    + '<span>👁 ' + formatNumber(item.views) + '</span>'
+                    + '<span>📋 ' + formatNumber(item.copies) + '</span>'
+                    + '<span>📝 ' + stepsCount + ' 步骤</span>'
+                    + '</div></div></div>';
             }).join('');
         }
 
@@ -277,12 +426,11 @@
 
             if (id) {
                 item = loadContentData().find(function (d) { return d.id === id; });
-                document.getElementById('editor-title').textContent = '编辑内容';
+                document.getElementById('editor-title').textContent = '✏️ 编辑内容';
             } else {
-                document.getElementById('editor-title').textContent = '新增内容';
+                document.getElementById('editor-title').textContent = '✨ 新增内容';
             }
 
-            // Fill form
             document.getElementById('f-title').value = item ? item.title : '';
             document.getElementById('f-category').value = item ? item.category : currentCategory;
             document.getElementById('f-id').value = item ? item.id : generateId();
@@ -297,8 +445,10 @@
             document.getElementById('f-closing').value = item && item.closing ? item.closing.summary : '';
             document.getElementById('f-related').value = item && item.closing && item.closing.relatedIds ? item.closing.relatedIds.join(', ') : '';
 
-            // If editing, disable ID change
             document.getElementById('f-id').disabled = !!id;
+
+            // Cover preview
+            updateCoverPreview();
 
             // Steps
             var stepsEl = document.getElementById('steps-container');
@@ -312,15 +462,30 @@
             }
 
             document.getElementById('editor-overlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // Focus title
+            setTimeout(function () { document.getElementById('f-title').focus(); }, 350);
         }
 
-        function openEditorForNew() {
-            openEditor(null);
-        }
+        function openEditorForNew() { openEditor(null); }
 
         function closeEditor() {
             document.getElementById('editor-overlay').classList.remove('active');
+            document.body.style.overflow = '';
             editingId = null;
+        }
+
+        function updateCoverPreview() {
+            var url = document.getElementById('f-cover').value.trim();
+            var preview = document.getElementById('cover-preview');
+            if (url) {
+                preview.src = url;
+                preview.classList.add('visible');
+                preview.onerror = function () { preview.classList.remove('visible'); };
+            } else {
+                preview.classList.remove('visible');
+            }
         }
 
         function addStepField(stepData) {
@@ -352,22 +517,32 @@
 
         function removeStep(n) {
             var el = document.getElementById('step-' + n);
-            if (el) el.remove();
+            if (el) {
+                el.style.opacity = '0';
+                el.style.transform = 'translateX(20px)';
+                el.style.transition = 'all 0.3s ease';
+                setTimeout(function () { el.remove(); }, 300);
+            }
         }
 
-        // ---------- Save / Delete ----------
+        // ---------- Save / Delete / Duplicate ----------
 
         function saveItem() {
             var data = loadContentData();
             var id = document.getElementById('f-id').value.trim();
             var title = document.getElementById('f-title').value.trim();
 
-            if (!id || !title) {
-                showToast('请填写标题和 ID', true);
+            if (!title) {
+                showToast('请填写标题', true);
+                document.getElementById('f-title').focus();
+                return;
+            }
+            if (!id) {
+                showToast('请填写 ID', true);
+                document.getElementById('f-id').focus();
                 return;
             }
 
-            // Collect steps
             var steps = [];
             document.querySelectorAll('.step-card').forEach(function (card) {
                 var stepTitle = card.querySelector('.step-title').value.trim();
@@ -380,12 +555,7 @@
                     var params = {};
                     if (stepModel) params.model = stepModel;
                     if (stepParam) params.duration = stepParam;
-                    steps.push({
-                        title: stepTitle,
-                        description: stepDesc,
-                        prompt: stepPrompt,
-                        params: params
-                    });
+                    steps.push({ title: stepTitle, description: stepDesc, prompt: stepPrompt, params: params });
                 }
             });
 
@@ -413,13 +583,9 @@
             };
 
             if (editingId) {
-                // Update existing
                 var idx = data.findIndex(function (d) { return d.id === editingId; });
-                if (idx !== -1) {
-                    data[idx] = newItem;
-                }
+                if (idx !== -1) data[idx] = newItem;
             } else {
-                // Check duplicate ID
                 if (data.some(function (d) { return d.id === id; })) {
                     showToast('ID「' + id + '」已存在，请换一个', true);
                     return;
@@ -429,37 +595,93 @@
 
             saveContentData(data);
             closeEditor();
-            refreshTabs();
-            renderList();
-            updateStatus();
+            refreshAll();
             showToast(editingId ? '✅ 内容已更新' : '✅ 内容已添加');
         }
 
         function deleteItem(id) {
-            if (!confirm('确定删除这条内容吗？此操作不可撤销。')) return;
+            showConfirm('确定删除吗？', '此操作不可撤销，内容将被永久移除。', function () {
+                var data = loadContentData();
+                data = data.filter(function (d) { return d.id !== id; });
+                saveContentData(data);
+                refreshAll();
+                showToast('🗑️ 已删除');
+            });
+        }
+
+        function duplicateItem(id) {
             var data = loadContentData();
-            data = data.filter(function (d) { return d.id !== id; });
+            var item = data.find(function (d) { return d.id === id; });
+            if (!item) return;
+
+            var copy = JSON.parse(JSON.stringify(item));
+            copy.id = item.id + '-copy-' + Date.now().toString(36);
+            copy.title = '【副本】' + copy.title;
+            data.push(copy);
             saveContentData(data);
-            refreshTabs();
-            renderList();
-            updateStatus();
-            showToast('已删除');
+            refreshAll();
+            showToast('📋 已复制，可点击编辑副本');
         }
 
         function confirmReset() {
-            if (!confirm('确定恢复默认数据吗？所有自定义修改将丢失！')) return;
-            resetContentData();
-            refreshTabs();
-            renderList();
-            updateStatus();
-            showToast('✅ 已恢复默认数据');
+            showConfirm('恢复默认数据', '所有自定义修改将丢失，确定继续吗？', function () {
+                resetContentData();
+                refreshAll();
+                showToast('✅ 已恢复默认数据');
+            });
         }
+
+        // ---------- Confirm Dialog ----------
+
+        function showConfirm(title, msg, callback) {
+            document.getElementById('confirm-title').textContent = title;
+            document.getElementById('confirm-msg').textContent = msg;
+            confirmCallback = callback;
+            document.getElementById('confirm-overlay').classList.add('active');
+        }
+
+        function closeConfirm() {
+            document.getElementById('confirm-overlay').classList.remove('active');
+            confirmCallback = null;
+        }
+
+        function confirmOk() {
+            if (confirmCallback) confirmCallback();
+            closeConfirm();
+        }
+
+        // ---------- Keyboard Shortcuts ----------
+
+        document.addEventListener('keydown', function (e) {
+            // Ctrl+S to save in editor
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                if (document.getElementById('editor-overlay').classList.contains('active')) {
+                    e.preventDefault();
+                    saveItem();
+                }
+            }
+            // Escape to close editor or confirm
+            if (e.key === 'Escape') {
+                if (document.getElementById('confirm-overlay').classList.contains('active')) {
+                    closeConfirm();
+                } else if (document.getElementById('editor-overlay').classList.contains('active')) {
+                    closeEditor();
+                }
+            }
+        });
 
         // ---------- Helpers ----------
 
         function generateId() {
             var prefix = currentCategory === 'vlog' ? 'vlog' : currentCategory === 'viral-prompts' ? 'prompt' : 'class';
             return prefix + '-' + Date.now().toString(36);
+        }
+
+        function formatNumber(n) {
+            if (!n) return '0';
+            if (n >= 10000) return (n / 10000).toFixed(1) + '万';
+            if (n >= 1000) return (n / 1000).toFixed(1) + 'k';
+            return n.toString();
         }
 
         function escapeHtml(str) {
@@ -475,7 +697,8 @@
         function showToast(msg, isError) {
             var toast = document.getElementById('toast');
             toast.textContent = msg;
-            toast.style.background = isError ? 'var(--admin-red)' : 'var(--admin-green)';
+            toast.style.background = isError ? 'var(--red)' : 'var(--green)';
+            toast.style.boxShadow = isError ? '0 8px 32px rgba(255,107,107,0.3)' : '0 8px 32px rgba(0,184,148,0.3)';
             toast.classList.add('show');
             setTimeout(function () { toast.classList.remove('show'); }, 2500);
         }

@@ -18,10 +18,6 @@
             <img class="brand-icon" src="img/梧桐树.png" alt="梧桐树">
             <span>梧桐树 ai</span>
         </a>
-        <div class="navbar-search">
-            <input type="text" placeholder="搜索提示词、教程..." />
-            <button>🔍</button>
-        </div>
         <div class="navbar-tabs" id="navbar-tabs">
             <a href="index.html" id="nav-home">首页</a>
             <a href="vlog.html" id="nav-vlog">🎬 Vlog</a>
@@ -59,10 +55,24 @@
             </div>
         </div>
 
+        <!-- Tags -->
+        <div class="detail-tags" id="detail-tags" style="display:none;"></div>
+
+        <!-- Opening Summary -->
+        <div class="detail-opening" id="detail-opening" style="display:none;"></div>
+
         <!-- Prompt Section -->
         <div class="detail-prompt-section" id="prompt-section">
             <!-- Rendered by JS: one prompt block per step -->
         </div>
+
+        <!-- Copy All Toolbar -->
+        <div class="detail-toolbar" id="detail-toolbar" style="display:none;">
+            <button class="toolbar-copy-all" id="copy-all-btn">📋 一键复制全部提示词</button>
+        </div>
+
+        <!-- Closing Remarks -->
+        <div class="detail-closing" id="detail-closing" style="display:none;"></div>
 
         <!-- Reference Materials (optional, shown only if data provides them) -->
         <div class="detail-refs" id="detail-refs" style="display:none;">

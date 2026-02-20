@@ -1118,6 +1118,95 @@
             opacity: 0;
         }
 
+        /* ======= Tech Department 3D Scene ======= */
+        .join-card.tech {
+            position: relative;
+            overflow: hidden;
+            perspective: 800px;
+        }
+
+        .join-card.tech .join-card-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            height: 100%;
+            gap: 20px;
+            z-index: auto;
+        }
+
+        .join-card.tech .join-card-text-wrapper {
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            opacity: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .join-card.tech.active .join-card-text-wrapper {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.95);
+        }
+
+        .tech-join-btn {
+            position: relative;
+            z-index: 20;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .tech-3d-scene {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .tech-background,
+        .tech-foreground {
+            position: absolute;
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+        }
+
+        .tech-background {
+            width: 120%;
+            height: auto;
+            transform: translateZ(-50px) scale(0.8);
+            z-index: 1;
+        }
+
+        .join-card.tech.active .tech-background {
+            opacity: 1;
+            transform: translateZ(0) scale(1.1);
+        }
+
+        .tech-foreground {
+            width: 100%;
+            height: auto;
+            transform: translateZ(0) translateY(100px) scale(0.8);
+            z-index: 5;
+            filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.4));
+        }
+
+        .join-card.tech.active .tech-foreground {
+            opacity: 1;
+            transform: translateZ(60px) translateY(-20px) scale(1.3);
+        }
+
+        .join-card.tech.active {
+            background: transparent;
+            border-color: transparent;
+            box-shadow: none;
+        }
+
+        .join-card.tech.active::before {
+            opacity: 0;
+        }
+
         /* ===== Responsive: Tablet ===== */
         @media (max-width: 960px) and (min-width: 721px) {
             .about-welcome {
@@ -1254,10 +1343,6 @@
             <img class="brand-icon" src="img/梧桐树.png" alt="梧桐树">
             <span>梧桐树 ai</span>
         </a>
-        <div class="navbar-search">
-            <input type="text" placeholder="搜索提示词、教程..." />
-            <button>🔍</button>
-        </div>
         <div class="navbar-tabs" id="navbar-tabs">
             <a href="index.html" id="nav-home">首页</a>
             <a href="vlog.html" id="nav-vlog">🎬 Vlog</a>
@@ -1494,22 +1579,37 @@ AI的飞速发展对社会是巨大的进步，却对我们这一代大学生异
 
                 <!-- 技术部 -->
                 <div class="join-card tech">
-                    <div class="join-card-header">
-                        <div>
-                            <div class="join-card-title">技术部</div>
-                            <div class="join-card-subtitle">TECH DEPARTMENT</div>
+                    <!-- Mask Layer for Header Bar -->
+                    <div class="card-mask-layer"></div>
+                    <div class="join-card-content">
+                        <div class="join-card-text-wrapper">
+                            <div class="join-card-header">
+                                <div>
+                                    <div class="join-card-title">技术部</div>
+                                    <div class="join-card-subtitle">TECH DEPARTMENT</div>
+                                </div>
+                                <div class="join-card-icon">💻</div>
+                            </div>
+                            <div class="join-card-slogans">
+                                <span class="join-tag">把握时代力量</span>
+                                <span class="join-tag">以技之长</span>
+                                <span class="join-tag">智控生活</span>
+                            </div>
+                            <p class="join-card-desc">
+                                技术部致力于网站的设计开发，服务器与网站的运行维护。历年来帮助各学院，社团，校内机构搭建了数十个网站。从亲手开发小程序，到和全国的技术大佬一起切磋交流。技术部以扎实的技术水平和坚持不懈的探索精神邀游在代码的海洋中，提升最核心的竞争力。
+                            </p>
                         </div>
-                        <div class="join-card-icon">💻</div>
+                        <a href="#" class="join-btn tech-join-btn"
+                            onmouseenter="this.closest('.join-card.tech').classList.add('active')"
+                            onmouseleave="this.closest('.join-card.tech').classList.remove('active')"
+                            onclick="event.preventDefault(); openBadgeModal();">申请加入 →</a>
                     </div>
-                    <div class="join-card-slogans">
-                        <span class="join-tag">把握时代力量</span>
-                        <span class="join-tag">以技之长</span>
-                        <span class="join-tag">智控生活</span>
+
+                    <!-- 3D Scene -->
+                    <div class="tech-3d-scene">
+                        <img src="img/背景2.png" class="tech-background" alt="Background">
+                        <img src="img/前景2.png" class="tech-foreground" alt="Foreground">
                     </div>
-                    <p class="join-card-desc">
-                        技术部致力于网站的设计开发，服务器与网站的运行维护。历年来帮助各学院，社团，校内机构搭建了数十个网站。从亲手开发小程序，到和全国的技术大佬一起切磋交流。技术部以扎实的技术水平和坚持不懈的探索精神邀游在代码的海洋中，提升最核心的竞争力。
-                    </p>
-                    <a href="#" class="join-btn" onclick="event.preventDefault(); openBadgeModal();">申请加入 →</a>
                 </div>
 
                 <!-- 视频部 -->

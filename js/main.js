@@ -247,7 +247,17 @@ function renderDetailPage(item) {
     metaEl.innerHTML = '<span>' + item.author + '</span>'
       + '<span>' + item.date + '</span>'
       + '<span>\u25B6 ' + formatNumber(item.views) + ' 观看</span>'
-      + '<span>\uD83D\uDCCB ' + formatNumber(item.copies) + ' 次复制</span>';
+      + '<span>\uD83D\uDCCB ' + formatNumber(item.copies) + ' 次复制</span>'
+      + (item.duration ? '<span>⏱ ' + item.duration + '</span>' : '');
+  }
+
+  // Tags
+  var tagsEl = document.getElementById('detail-tags');
+  if (tagsEl && item.tags && item.tags.length > 0) {
+    tagsEl.style.display = '';
+    tagsEl.innerHTML = item.tags.map(function (tag) {
+      return '<span class="detail-tag">' + escapeHtml(tag) + '</span>';
+    }).join('');
   }
 
   // Video: use videoUrl if available, otherwise show cover as poster
@@ -258,6 +268,14 @@ function renderDetailPage(item) {
     } else if (item.cover) {
       videoContainer.innerHTML = '<div class="video-placeholder" style="background:url(' + item.cover + ') center/cover no-repeat;"><div class="video-placeholder-icon">\u25B6</div></div>';
     }
+  }
+
+  // Opening summary
+  var openingEl = document.getElementById('detail-opening');
+  if (openingEl && item.opening && item.opening.summary) {
+    openingEl.style.display = '';
+    openingEl.innerHTML = '<div class="opening-icon">💡</div>'
+      + '<p>' + escapeHtml(item.opening.summary) + '</p>';
   }
 
   // Prompt cards
@@ -273,8 +291,13 @@ function renderDetailPage(item) {
       window._stepPrompts.push(step.prompt);
 
       var label = multi
-        ? '<span class="prompt-step-num">0' + (i + 1) + '</span>' + step.title
+        ? '<span class="prompt-step-num">0' + (i + 1) + '</span>' + escapeHtml(step.title)
         : '\uD83D\uDCCB 提示词 Prompt';
+
+      // Step description
+      var descHtml = step.description
+        ? '<div class="prompt-card-desc">' + escapeHtml(step.description) + '</div>'
+        : '';
 
       var paramsHtml = '';
       if (step.params) {
@@ -291,6 +314,7 @@ function renderDetailPage(item) {
         + '<span class="prompt-card-label">' + label + '</span>'
         + '<button class="prompt-copy-btn" data-step-index="' + i + '">\u4E00\u952E\u590D\u5236</button>'
         + '</div>'
+        + descHtml
         + '<pre class="prompt-card-code">' + escapeHtml(step.prompt) + '</pre>'
         + paramsHtml
         + '</div>';
@@ -314,6 +338,31 @@ function renderDetailPage(item) {
         }
       }
     });
+
+    // Copy all toolbar
+    if (steps.length > 1) {
+      var toolbarEl = document.getElementById('detail-toolbar');
+      if (toolbarEl) toolbarEl.style.display = '';
+      var copyAllBtn = document.getElementById('copy-all-btn');
+      if (copyAllBtn) {
+        copyAllBtn.addEventListener('click', function () {
+          var allPrompts = window._stepPrompts.join('\n\n---\n\n');
+          copyPrompt(allPrompts, copyAllBtn);
+          copyAllBtn.textContent = '✅ 全部已复制';
+          setTimeout(function () {
+            copyAllBtn.textContent = '📋 一键复制全部提示词';
+          }, 2000);
+        });
+      }
+    }
+  }
+
+  // Closing remarks
+  var closingEl = document.getElementById('detail-closing');
+  if (closingEl && item.closing && item.closing.summary) {
+    closingEl.style.display = '';
+    closingEl.innerHTML = '<div class="closing-label">✍️ 创作后记</div>'
+      + '<p>' + escapeHtml(item.closing.summary) + '</p>';
   }
 
   // Reference materials (if item.references exists)
@@ -327,7 +376,7 @@ function renderDetailPage(item) {
       var isVid = ref.type === 'video';
       var media = isVid
         ? '<video src="' + ref.url + '" muted playsinline></video>'
-        : '<img src="' + ref.url + '" alt="' + (ref.label || '') + '" loading="lazy" />'; // (No replacement yet, just reading)
+        : '<img src="' + ref.url + '" alt="' + (ref.label || '') + '" loading="lazy" />';
       refsHtml += '<div class="ref-item">'
         + '<span class="ref-type-badge">' + (isVid ? '\u89C6\u9891' : '\u56FE\u7247') + '</span>'
         + media
@@ -388,7 +437,9 @@ function initHeroCarousel() {
     navContainer.appendChild(deckWrapper);
   }
 
-  var bgItems = Array.from(document.querySelectorAll('.bg-item'));
+  // Dual background layers for crossfade
+  var bgFront = document.getElementById('carousel-bg-front');
+  var bgBack = document.getElementById('carousel-bg-back');
   var prevBtn = document.getElementById('prev-slide');
   var nextBtn = document.getElementById('next-slide');
   var indicatorsContainer = document.getElementById('carousel-indicators');
@@ -404,12 +455,23 @@ function initHeroCarousel() {
     var item = getContentById(id);
     if (!item) return null;
 
+    // Generate high-res version of cover for fullscreen background
+    var hiresCover = item.cover.replace(/\/\d+\/\d+$/, '/1920/1080');
+
     return {
       title: item.title,
       desc: item.opening.summary,
-      bg: "url('" + item.cover + "')"
+      cover: item.cover,
+      bgCover: hiresCover
     };
   }).filter(Boolean);
+
+  // Set initial background on both layers
+  if (bgFront && contentData.length > 0) {
+    bgFront.style.backgroundImage = "url('" + contentData[0].bgCover + "')";
+    bgBack.style.backgroundImage = "url('" + contentData[0].bgCover + "')";
+  }
+
   if (indicatorsContainer) {
     indicatorsContainer.innerHTML = '';
     contentData.forEach((_, i) => {
@@ -451,6 +513,25 @@ function initHeroCarousel() {
     });
   }
 
+  // Crossfade background: put new image on back layer, fade out front, then swap
+  function setBackground(imgSrc) {
+    if (!bgFront || !bgBack) return;
+    // 1. Set new image on back layer (hidden behind front)
+    bgBack.style.backgroundImage = 'url("' + imgSrc + '")';
+    // 2. Fade out front to reveal back
+    bgFront.classList.add('fading');
+    // 3. After fade completes, update front with new image and reset instantly
+    setTimeout(function () {
+      // Temporarily disable transition so the swap is invisible
+      bgFront.style.transition = 'none';
+      bgFront.style.backgroundImage = 'url("' + imgSrc + '")';
+      bgFront.classList.remove('fading');
+      // Force reflow then re-enable transition
+      void bgFront.offsetWidth;
+      bgFront.style.transition = '';
+    }, 850);
+  }
+
   // --- The Cinematic Switch ---
   function nextSlide() {
     if (isAnimating) return;
@@ -466,79 +547,86 @@ function initHeroCarousel() {
       console.warn('Deck empty or sync error');
       currentIndex = nextIndex;
       updateVisuals(currentIndex);
+      setBackground(contentData[currentIndex].bgCover);
       isAnimating = false;
       return;
     }
 
     currentIndex = nextIndex;
 
-    // Create fly-in element matching the card's position
+    // Get the ACTUAL image from the card
     var cardImg = nextCard.querySelector('img');
-    var imgSrc = cardImg ? cardImg.src : '';
+    var imgSrc = cardImg ? cardImg.src : contentData[currentIndex].bgCover;
 
     var cardRect = nextCard.getBoundingClientRect();
     var containerRect = heroSection.getBoundingClientRect();
 
-    nextCard.style.opacity = '0';
+    // PRE-APPEND recycled card BEFORE animation starts
+    var recycledCard = document.createElement('div');
+    recycledCard.className = 'nav-card';
+    recycledCard.dataset.index = oldIndex;
+    recycledCard.innerHTML = '<img src="' + contentData[oldIndex].cover + '" alt="Card">';
+    deckWrapper.appendChild(recycledCard);
 
+    // Hide the flying card in the deck
+    nextCard.style.opacity = '0';
+    nextCard.style.pointerEvents = 'none';
+
+    // Use high-res image for the fly-in
+    var bgSrc = contentData[currentIndex].bgCover;
+
+    // Create fly-in overlay
     var flyIn = document.createElement('div');
     flyIn.classList.add('card-fly-in');
-    flyIn.style.position = 'absolute';
     flyIn.style.left = (cardRect.left - containerRect.left) + 'px';
     flyIn.style.top = (cardRect.top - containerRect.top) + 'px';
     flyIn.style.width = cardRect.width + 'px';
     flyIn.style.height = cardRect.height + 'px';
-    flyIn.style.backgroundImage = 'url("' + imgSrc + '")';
+    flyIn.style.backgroundImage = 'url("' + bgSrc + '")';
     flyIn.style.backgroundSize = 'cover';
     flyIn.style.backgroundPosition = 'center';
-    flyIn.style.zIndex = '35';
     flyIn.style.borderRadius = '16px';
 
     heroSection.appendChild(flyIn);
 
-    // Trigger expansion animation
+    // Trigger expansion
     void flyIn.offsetWidth;
     flyIn.classList.add('expanding');
 
-    // Slide deck left to fill the gap
+    // Slide deck left
     var slideDistance = cardRect.width + 24;
     deckWrapper.style.transform = 'translateX(-' + slideDistance + 'px)';
 
-    // 5. Update visuals (Text fade out/in)
+    // Update text/indicators
     updateVisuals(currentIndex);
 
-    // Switch real background & recycle deck after animation midpoint
-    setTimeout(() => {
-      bgItems.forEach(b => b.classList.remove('active'));
-      bgItems[currentIndex].classList.add('active');
+    // At 900ms: swap background behind fly-in, clean up deck, UNLOCK for next click
+    setTimeout(function () {
+      if (bgFront && bgBack) {
+        bgFront.style.transition = 'none';
+        bgFront.style.backgroundImage = 'url("' + bgSrc + '")';
+        bgBack.style.backgroundImage = 'url("' + bgSrc + '")';
+        void bgFront.offsetWidth;
+        bgFront.style.transition = '';
+      }
 
-      // Recycle old background as a card at the end of deck
-      var oldBgStyle = bgItems[oldIndex].style.backgroundImage;
-      var oldUrl = oldBgStyle.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
-
-      var oldCardDiv = document.createElement('div');
-      oldCardDiv.className = 'nav-card';
-      oldCardDiv.dataset.index = oldIndex;
-      oldCardDiv.innerHTML = '<img src="' + oldUrl + '" alt="Card">';
-
-      // Reset deck transform seamlessly: disable transition, reset, update DOM, restore
       deckWrapper.style.transition = 'none';
       deckWrapper.style.transform = 'translateX(0)';
-      deckWrapper.appendChild(oldCardDiv);
       if (nextCard.parentNode) nextCard.parentNode.removeChild(nextCard);
       void deckWrapper.offsetWidth;
       deckWrapper.style.transition = '';
 
-    }, 800);
+      // Unlock immediately — user can click again
+      isAnimating = false;
+    }, 900);
 
-    // Cleanup: fade out flyIn, then remove
-    setTimeout(() => {
-      flyIn.style.opacity = '0';
-      setTimeout(() => {
+    // Fly-in fades out independently (doesn't block next click)
+    setTimeout(function () {
+      flyIn.classList.add('fade-out');
+      setTimeout(function () {
         if (flyIn.parentNode) flyIn.parentNode.removeChild(flyIn);
-        isAnimating = false;
-      }, 500);
-    }, 1100);
+      }, 650);
+    }, 1000);
   }
 
   // --- Previous Slide ---
@@ -550,20 +638,16 @@ function initHeroCarousel() {
     currentIndex = (currentIndex - 1 + contentData.length) % contentData.length;
 
     updateVisuals(currentIndex);
+    setBackground(contentData[currentIndex].bgCover);
 
-    // Move last deck card to front, insert old BG as new card
     var lastCard = deckWrapper.lastElementChild;
     if (lastCard) deckWrapper.removeChild(lastCard);
-
-    var oldBgStyle = bgItems[oldIndex].style.backgroundImage;
-    var url = oldBgStyle.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
 
     var oldCardDiv = document.createElement('div');
     oldCardDiv.className = 'nav-card';
     oldCardDiv.dataset.index = oldIndex;
-    oldCardDiv.innerHTML = '<img src="' + url + '" alt="Card">';
+    oldCardDiv.innerHTML = '<img src="' + contentData[oldIndex].cover + '" alt="Card">';
 
-    // Slide in from left: set transform, insert card, then animate to 0
     var cardWidth = 260;
     if (deckWrapper.children.length > 0) cardWidth = deckWrapper.children[0].getBoundingClientRect().width;
     var slideDist = cardWidth + 24;
@@ -576,23 +660,16 @@ function initHeroCarousel() {
     deckWrapper.style.transition = '';
     deckWrapper.style.transform = 'translateX(0)';
 
-    // Switch background
-    bgItems.forEach(b => b.classList.remove('active'));
-    bgItems[currentIndex].classList.add('active');
-
-    setTimeout(() => { isAnimating = false; }, 800);
+    setTimeout(function () { isAnimating = false; }, 500);
   }
 
   // Bind Events
   if (nextBtn) nextBtn.addEventListener('click', nextSlide);
   if (prevBtn) prevBtn.addEventListener('click', prevSlide);
 
-  // Also click on deck card triggers nextSlide? 
-  // Ideally clicking a specific card jumps to it. 
-  // For now, let's keep it simple: Click on first card = Next.
+  // Click on first deck card = Next
   deckWrapper.addEventListener('click', function (e) {
     if (e.target.closest('.nav-card')) {
-      // If it's the first card, treat as next.
       var card = e.target.closest('.nav-card');
       if (card === deckWrapper.firstElementChild) {
         nextSlide();
@@ -600,7 +677,7 @@ function initHeroCarousel() {
     }
   });
 
-  // Initial Deck Cleanup (Remove Card-0)
+  // Initial Deck Cleanup (Remove Card-0 since it's the active background)
   var initialTarget = Array.from(deckWrapper.children).find(c => parseInt(c.dataset.index) === 0);
   if (initialTarget) deckWrapper.removeChild(initialTarget);
 }

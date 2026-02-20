@@ -22,10 +22,6 @@
       <img class="brand-icon" src="img/梧桐树.png" alt="梧桐树">
       <span>梧桐树 ai</span>
     </a>
-    <div class="navbar-search">
-      <input type="text" placeholder="搜索提示词、教程..." id="search-input" />
-      <button>🔍</button>
-    </div>
     <div class="navbar-tabs" id="navbar-tabs">
       <a href="index.html" class="active" id="nav-home">首页</a>
       <a href="vlog.html" id="nav-vlog">🎬 Vlog</a>
@@ -46,13 +42,10 @@
   <!-- Hero Section -->
   <!-- Hero Carousel -->
   <section class="hero-carousel" id="hero-carousel">
-    <!-- Layer 1: Backgrounds -->
+    <!-- Layer 1: Background (dual layer for crossfade) -->
     <div class="carousel-bg" id="carousel-bg">
-      <div class="bg-item active" style="background-image: url('https://picsum.photos/seed/trailer/640/360');"></div>
-      <div class="bg-item" style="background-image: url('https://picsum.photos/seed/ghibli/640/360');"></div>
-      <div class="bg-item" style="background-image: url('https://picsum.photos/seed/apple/640/360');"></div>
-      <div class="bg-item" style="background-image: url('https://picsum.photos/seed/cyber/640/360');"></div>
-      <div class="bg-item" style="background-image: url('https://picsum.photos/seed/copy/640/360');"></div>
+      <div class="bg-item bg-back" id="carousel-bg-back"></div>
+      <div class="bg-item bg-front" id="carousel-bg-front"></div>
     </div>
 
     <!-- Layer 2: Content Info -->
@@ -86,23 +79,19 @@
 
     <!-- Layer 3: Navigation / Card Stack (Right Side) -->
     <div class="carousel-nav" id="carousel-nav">
-      <!-- Logic: First item is active (hidden/synced                <!-- Navigation Deck (Right) -->
       <div class="nav-deck">
-        <!-- Cards for Next/Future slides -->
-        <!-- Index 1: Ghibli -->
+        <!-- 4 cards to fill the right side for infinite loop feel -->
         <div class="nav-card" data-index="1">
-          <div class="card-content">抖音爆款：AI 吉卜力风格...</div>
           <img src="https://picsum.photos/seed/ghibli/640/360" alt="Ghibli">
         </div>
-        <!-- Index 2: Apple -->
         <div class="nav-card" data-index="2">
-          <div class="card-content">小红书刷屏：AI 生成苹果...</div>
           <img src="https://picsum.photos/seed/apple/640/360" alt="Apple">
         </div>
-        <!-- Index 3: Cyber -->
         <div class="nav-card" data-index="3">
-          <div class="card-content">Sora 逆天！AI 生成赛博...</div>
           <img src="https://picsum.photos/seed/cyber/640/360" alt="Cyber">
+        </div>
+        <div class="nav-card" data-index="4">
+          <img src="https://picsum.photos/seed/copy/640/360" alt="Copy">
         </div>
       </div>
     </div>

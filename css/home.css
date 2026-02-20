@@ -20,7 +20,7 @@
     border-bottom: 1px solid var(--border);
 }
 
-/* Layer 1: Backgrounds (Slide Logic) */
+/* Layer 1: Backgrounds (Dual crossfade) */
 .carousel-bg {
     position: absolute;
     inset: 0;
@@ -33,36 +33,23 @@
     inset: 0;
     background-size: cover;
     background-position: center;
-    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease;
-    will-change: transform;
-    /* Default Hidden State */
-    opacity: 0;
-    transform: scale(1.1);
-    /* Slight zoom for dramatic effect */
-    filter: brightness(0.4);
-    /* Darken for text readability */
+    filter: brightness(0.7);
+    opacity: 1;
 }
 
-/* Active: Center, Visible */
-.carousel-bg .bg-item.active {
-    opacity: 1;
+/* Back layer: sits behind, new image goes here first */
+.carousel-bg .bg-back {
+    z-index: 1;
+}
+
+/* Front layer: sits on top, fades out to reveal back layer */
+.carousel-bg .bg-front {
     z-index: 2;
-    transform: translateX(0) scale(1);
-    filter: brightness(0.6);
+    transition: opacity 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* Next: Ready on Right */
-.carousel-bg .bg-item.next {
-    opacity: 1;
-    z-index: 1;
-    transform: translateX(100%) scale(1);
-}
-
-/* Prev: Exit to Left */
-.carousel-bg .bg-item.prev {
-    opacity: 1;
-    z-index: 1;
-    transform: translateX(-100%) scale(1);
+.carousel-bg .bg-front.fading {
+    opacity: 0;
 }
 
 /* Content Layer */
@@ -228,10 +215,12 @@
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    width: 50%;
+    /* Show 3 full cards + half of 4th peeking at edge */
+    width: calc(260px * 3 + 24px * 4 + 130px);
+    max-width: 60%;
     height: 100%;
     z-index: 40;
-    padding-left: 40px;
+    padding-left: 24px;
     overflow: hidden;
     pointer-events: none;
 }
@@ -275,42 +264,46 @@
     height: 100%;
     object-fit: cover;
     z-index: -1;
-    opacity: 0.6;
-    transition: transform 0.6s ease, opacity 0.4s ease;
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .nav-card:hover img {
-    transform: scale(1.1);
-    opacity: 0.8;
+    transform: scale(1.08);
 }
 
 /* Animation Classes */
 .card-fly-in {
     position: absolute;
-    z-index: 999;
-    transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
-    /* Core Cinematic Move */
+    z-index: 35;
+    transition: left 1s cubic-bezier(0.19, 1, 0.22, 1),
+        top 1s cubic-bezier(0.19, 1, 0.22, 1),
+        width 1s cubic-bezier(0.19, 1, 0.22, 1),
+        height 1s cubic-bezier(0.19, 1, 0.22, 1),
+        border-radius 1s cubic-bezier(0.19, 1, 0.22, 1),
+        filter 1s cubic-bezier(0.19, 1, 0.22, 1),
+        box-shadow 1s cubic-bezier(0.19, 1, 0.22, 1);
     pointer-events: none;
     transform-origin: center center;
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    opacity: 1;
 }
 
 .card-fly-in.expanding {
     top: 0 !important;
     left: 0 !important;
     width: 100% !important;
-    /* Fit container */
     height: 100% !important;
-    /* Fit container */
     border-radius: 0 !important;
     margin: 0 !important;
     transform: none !important;
-    /* Ensure no scale/translate interference */
-    filter: brightness(0.6);
-    /* Match the background dimming */
+    filter: brightness(0.7);
     box-shadow: none;
-    z-index: 9;
-    /* Below Text (10) but above BG */
+    z-index: 35;
+}
+
+.card-fly-in.fade-out {
+    opacity: 0;
+    transition: opacity 0.6s ease;
 }
 
 /* Mobile */
