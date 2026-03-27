@@ -13,7 +13,12 @@
   <link rel="stylesheet" href="css/index.css" />
   <link rel="stylesheet" href="css/home.css" />
   <!-- Vercel Speed Insights -->
-  <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
+  <script>
+    window.si = window.si || function() { (window.si.q = window.si.q || []).push(arguments); };
+    si('init', 'speed-insights@1.0.0');
+    si('config', { projectId: 'wtgjx/wutongshu.ai' });
+  </script>
+  <script defer src="https://cdn.vercel-insights.com/v1/speed-insights.js"></script>
 </head>
 
 <body data-page="home">

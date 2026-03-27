@@ -8,7 +8,12 @@
     <meta name="description" content="用 AI 创作的个人 Vlog 合集，记录灵感与生活，附带完整提示词。" />
     <link rel="stylesheet" href="css/index.css" />
     <!-- Vercel Speed Insights -->
-    <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
+    <script>
+      window.si = window.si || function() { (window.si.q = window.si.q || []).push(arguments); };
+      si('init', 'speed-insights@1.0.0');
+      si('config', { projectId: 'wtgjx/wutongshu.ai' });
+    </script>
+    <script defer src="https://cdn.vercel-insights.com/v1/speed-insights.js"></script>
 </head>
 
 <body data-page="list" data-category="vlog">
