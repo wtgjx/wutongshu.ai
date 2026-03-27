@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>吴桐 · 大学三年成长分享</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --vintage-pink: #E8B4B8;
+            --vintage-green: #8FA998;
+            --cream: #FDF8F3;
+            --cream-dark: #F5EDE4;
+            --text-dark: #3D3D3D;
+            --text-light: #6B6B6B;
+        }
+
+        @font-face {
+            font-family: 'LXGW WenKai';
+            src: url('https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        body {
+            font-family: 'LXGW WenKai', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--cream);
+            color: var(--text-dark);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease-in-out, visibility 0.8s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 80px;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* 封面页特殊样式 */
+        .slide.cover {
+            background: linear-gradient(135deg, var(--cream) 0%, var(--vintage-pink) 100%);
+        }
+
+        .slide.cover .cover-content {
+            text-align: center;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        .slide.cover .avatar {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--vintage-pink), var(--vintage-green));
+            margin: 0 auto 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            color: white;
+            box-shadow: 0 20px 60px rgba(232, 180, 184, 0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .slide.cover h1 {
+            font-size: 56px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-dark);
+            letter-spacing: 8px;
+        }
+
+        .slide.cover .subtitle {
+            font-size: 24px;
+            color: var(--text-light);
+            margin-bottom: 30px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .slide.cover .quote {
+            font-size: 20px;
+            color: var(--vintage-green);
+            font-style: italic;
+            max-width: 600px;
+            line-height: 1.8;
+            margin-top: 20px;
+        }
+
+        /* 普通页面样式 */
+        .slide.normal {
+            background: var(--cream);
+        }
+
+        .slide-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 1200px;
+            width: 100%;
+            gap: 40px;
+        }
+
+        /* 左图右文布局 */
+        .slide.side-by-side .slide-content {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            max-width: 1100px;
+        }
+
+        .slide.side-by-side .slide-image {
+            width: 70%;
+            max-width: 850px;
+            height: auto;
+            max-height: 750px;
+            min-height: 550px;
+            flex-shrink: 0;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            display: block;
+            font-size: 0;
+            padding: 0;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+        }
+
+        .slide.side-by-side .slide-text {
+            width: 25%;
+            text-align: left;
+            flex-shrink: 0;
+        }
+
+        .slide.side-by-side .slide-text h2 {
+            font-size: 42px;
+        }
+
+        /* 灯箱样式 */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .lightbox.active img {
+            transform: scale(1);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .lightbox-close:hover {
+            opacity: 1;
+        }
+
+        /* 响应式：小屏幕回到上下布局 */
+        @media (max-width: 900px) {
+            .slide.side-by-side .slide-content {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .slide.side-by-side .slide-image {
+                width: 100%;
+                max-width: 500px;
+            }
+
+            .slide.side-by-side .slide-text {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        .slide-image {
+            width: 100%;
+            max-width: 800px;
+            height: 450px;
+            border-radius: 20px;
+            object-fit: cover;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, var(--vintage-pink) 0%, var(--vintage-green) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* 竖屏图片的特殊样式 */
+        .slide.vertical-image .slide-image {
+            height: auto;
+            max-height: 520px;
+            min-height: 300px;
+            background: transparent;
+        }
+
+        .slide.vertical-image .slide-image img,
+        .slide.vertical-image .slide-image div {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .slide-text {
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .slide-text h2 {
+            font-size: 32px;
+            line-height: 1.8;
+            color: var(--text-dark);
+            font-weight: 500;
+            white-space: pre-line;
+        }
+
+        /* 纯文字页面 */
+        .slide.text-only {
+            background: var(--text-dark);
+        }
+
+        .slide.text-only .slide-text h2 {
+            color: var(--cream);
+            font-size: 42px;
+        }
+
+        /* 资源页 */
+        .slide.resources {
+            background: linear-gradient(135deg, var(--vintage-green) 0%, var(--vintage-pink) 100%);
+        }
+
+        .slide.resources .slide-content {
+            flex-direction: row;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .slide.resources .avatar-section {
+            text-align: center;
+        }
+
+        .slide.resources .avatar {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 72px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .slide.resources .qr-section {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        .slide.resources .qr-code {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, var(--cream-dark), var(--cream));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 80px;
+            color: var(--text-light);
+        }
+
+        .slide.resources h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .slide.resources .resource-list {
+            text-align: left;
+            font-size: 16px;
+            line-height: 2;
+            color: var(--text-light);
+        }
+
+        .slide.resources .closing {
+            margin-top: 30px;
+            font-size: 20px;
+            color: var(--vintage-green);
+        }
+
+        /* 顶部时间线进度条 */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(232, 180, 184, 0.2);
+            z-index: 100;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--vintage-pink), var(--vintage-green));
+            transition: width 0.4s ease;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .progress-dots {
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 101;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .progress-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--cream-dark);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .progress-dot.active {
+            background: var(--vintage-pink);
+            transform: scale(1.4);
+        }
+
+        .progress-dot:hover {
+            background: var(--vintage-green);
+            transform: scale(1.2);
+        }
+
+        .progress-dot.passed {
+            background: var(--vintage-green);
+        }
+
+        .page-indicator {
+            position: fixed;
+            top: 15px;
+            right: 20px;
+            font-family: 'Playfair Display', serif;
+            font-size: 13px;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 6px 12px;
+            border-radius: 15px;
+            z-index: 101;
+        }
+
+        /* 导航提示 */
+        .nav-hint {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 13px;
+            color: var(--text-light);
+            opacity: 0.5;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* 动画 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.4;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        /* 图片画廊 */
+        .image-gallery {
+            position: relative;
+            z-index: 100;
+        }
+
+        /* 点击区域 */
+        .click-area {
+            position: fixed;
+            top: 0;
+            height: 100%;
+            width: 30%;
+            cursor: pointer;
+            z-index: 50;
+            opacity: 0;
+            pointer-events: auto;
+        }
+
+        .click-area.left {
+            left: 0;
+        }
+
+        .click-area.right {
+            right: 0;
+        }
+
+        .click-area:hover {
+            background: linear-gradient(to right, rgba(232, 180, 184, 0.05), transparent);
+        }
+
+        .click-area.right:hover {
+            background: linear-gradient(to left, rgba(143, 169, 152, 0.05), transparent);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 40px 30px;
+            }
+
+            .slide.cover h1 {
+                font-size: 36px;
+            }
+
+            .slide.cover .subtitle {
+                font-size: 18px;
+            }
+
+            .slide.cover .quote {
+                font-size: 16px;
+            }
+
+            .slide-image {
+                height: 280px;
+            }
+
+            .slide-text h2 {
+                font-size: 22px;
+            }
+
+            .slide.resources .slide-content {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .progress-container {
+                padding: 10px 16px;
+                gap: 8px;
+            }
+
+            .progress-dot {
+                width: 8px;
+                height: 8px;
+            }
+        }
+
+        /* 文件夹爆发效果样式 - 优化版 */
+        .folder-explosion-container {
+            position: relative;
+            width: 100%;
+            max-width: 950px;
+            height: 520px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .folder-wrapper {
+            position: relative;
+            z-index: 10;
+        }
+
+        .folder-icon {
+            width: 150px;
+            height: 110px;
+            background: linear-gradient(145deg, #E8B4B8 0%, #DDA5A9 50%, #D09599 100%);
+            border-radius: 18px 18px 8px 8px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 18px 55px rgba(232, 180, 184, 0.5), 0 8px 25px rgba(0,0,0,0.12);
+            z-index: 10;
+            overflow: visible;
+        }
+
+        .folder-icon::before {
+            content: '';
+            position: absolute;
+            top: -22px;
+            left: 0;
+            width: 70px;
+            height: 28px;
+            background: linear-gradient(145deg, #E8B4B8 0%, #DDA5A9 100%);
+            border-radius: 18px 18px 0 0;
+            box-shadow: 0 -6px 18px rgba(232, 180, 184, 0.35);
+        }
+
+        .folder-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #8FA998 0%, #7F9988 100%);
+            border-radius: 50%;
+            box-shadow: 0 6px 20px rgba(143, 169, 152, 0.4), inset 0 2px 6px rgba(255,255,255,0.3);
+        }
+
+        .folder-icon span {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 28px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .folder-icon:hover {
+            transform: scale(1.12) rotate(-3deg);
+            box-shadow: 0 25px 70px rgba(232, 180, 184, 0.65), 0 15px 40px rgba(0,0,0,0.18);
+        }
+
+        .folder-icon.opened {
+            opacity: 0;
+            transform: scale(0.3) rotate(20deg);
+            pointer-events: none;
+        }
+
+        .folder-hint {
+            position: absolute;
+            bottom: -65px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 16px;
+            color: #8FA998;
+            opacity: 0.9;
+            white-space: nowrap;
+            transition: all 0.4s ease;
+            background: rgba(143, 169, 152, 0.12);
+            padding: 10px 24px;
+            border-radius: 25px;
+            border: 1px solid rgba(143, 169, 152, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .folder-icon.opened ~ .folder-hint {
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px);
+        }
+
+        .explosion-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 8px;
+            padding: 10px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+        }
+
+        .explosion-grid.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .explosion-item {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+            transform: scale(0) rotate(-15deg);
+            opacity: 0;
+            transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+            position: relative;
+        }
+
+        .explosion-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 50%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .explosion-item:hover::after {
+            opacity: 1;
+        }
+
+        .explosion-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 16px;
+            transition: transform 0.4s ease;
+        }
+
+        .explosion-grid.active .explosion-item {
+            transform: scale(1) rotate(0deg);
+            opacity: 1;
+        }
+
+        .explosion-item:hover {
+            transform: scale(1.06) !important;
+            box-shadow: 0 18px 45px rgba(0,0,0,0.22);
+            z-index: 10;
+        }
+
+        .explosion-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* 每个图片的延迟动画 */
+        .explosion-grid.active .explosion-item:nth-child(1) { transition-delay: 0.08s; }
+        .explosion-grid.active .explosion-item:nth-child(2) { transition-delay: 0.16s; }
+        .explosion-grid.active .explosion-item:nth-child(3) { transition-delay: 0.24s; }
+        .explosion-grid.active .explosion-item:nth-child(4) { transition-delay: 0.32s; }
+        .explosion-grid.active .explosion-item:nth-child(5) { transition-delay: 0.40s; }
+        .explosion-grid.active .explosion-item:nth-child(6) { transition-delay: 0.48s; }
+        .explosion-grid.active .explosion-item:nth-child(7) { transition-delay: 0.56s; }
+        .explosion-grid.active .explosion-item:nth-child(8) { transition-delay: 0.64s; }
+        .explosion-grid.active .explosion-item:nth-child(9) { transition-delay: 0.72s; }
+        .explosion-grid.active .explosion-item:nth-child(10) { transition-delay: 0.80s; }
+        .explosion-grid.active .explosion-item:nth-child(11) { transition-delay: 0.88s; }
+        .explosion-grid.active .explosion-item:nth-child(12) { transition-delay: 0.96s; }
+
+        /* 重置按钮 */
+        .reset-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.95);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            z-index: 20;
+        }
+
+        .reset-btn:hover {
+            background: linear-gradient(135deg, #E8B4B8 0%, #8FA998 100%);
+            color: white;
+            transform: scale(1.1) rotate(180deg);
+            box-shadow: 0 10px 30px rgba(143, 169, 152, 0.4);
+        }
+
+        .explosion-grid.active ~ .reset-btn {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* 图片放大查看模态框 */
+        .image-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .image-modal img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            transform: scale(0.9);
+            transition: transform 0.4s ease;
+        }
+
+        .image-modal.active img {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.3);
+            transform: rotate(90deg);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .folder-explosion-container {
+                height: 420px;
+            }
+
+            .folder-icon {
+                width: 110px;
+                height: 95px;
+            }
+
+            .folder-icon::after {
+                font-size: 48px;
+            }
+
+            .explosion-grid {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(4, 1fr);
+                gap: 6px;
+                padding: 8px;
+            }
+
+            .explosion-item {
+                border-radius: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .folder-explosion-container {
+                height: 380px;
+            }
+
+            .explosion-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(6, 1fr);
+                gap: 5px;
+                padding: 7px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slideshow-container">
+        <!-- 第1页 | 封面 -->
+        <div class="slide cover active" data-index="0">
+            <div class="cover-content">
+                <div class="avatar" style="background: url('images/头像.png') center/cover; box-shadow: 0 20px 60px rgba(0,0,0,0.3);"></div>
+                <h1>吴桐</h1>
+                <p class="subtitle">包装工程 · 大三</p>
+                <p class="quote">「我走了三年，想跟你们分享下我路上看到的东西」</p>
+            </div>
+        </div>
+
+        <!-- 第2页 | 开场问题 -->
+        <div class="slide text-only" data-index="1">
+            <div class="slide-content">
+                <div class="slide-text">
+                    <h2>🎓 你来长沙师范学院上学
+是你的人生目的？
+还是你为了完成人生目的的
+一个工具和平台？</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第3页 | 大一：我的计划 -->
+        <div class="slide normal side-by-side" data-index="2">
+            <div class="slide-content">
+                <div class="slide-image" style="background: url('images/图3.png') center/contain no-repeat; cursor: zoom-in;" onclick="openLightbox('images/图3.png')"></div>
+                <div class="slide-text">
+                    <h2>大一的我，给自己定了一张清单。</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第4页 | 大一：执行 -->
+        <div class="slide normal" data-index="3">
+            <div class="slide-content">
+                <div class="slide-image">🏆</div>
+                <div class="slide-text">
+                    <h2>🏆 拿到奖学金 🏆
+👥 加入三个社团 👥
+🏃 开始跑步 🏃</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第5页 | 国旗护卫队 -->
+        <div class="slide normal" data-index="4">
+            <div class="slide-content">
+                <div class="image-gallery" id="gallery-page5" style="position: relative; width: 100%; max-width: 800px; height: 450px; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); cursor: pointer;" onclick="toggleGallery('gallery-page5', event)">
+                    <div class="gallery-img active" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图三1.jpg') center/cover; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图三2.jpg') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图三3.jpg') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图三4.jpg') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图三5.jpg') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-indicator" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 1; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                    </div>
+                    <div class="gallery-hint" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 40px; height: 40px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; opacity: 0.7; transition: opacity 0.3s;">→</div>
+                </div>
+                <div class="slide-text">
+                    <h2>有些经历，跟专业无关，但塑造了你这个人。</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第6页 | 三下乡 -->
+        <div class="slide normal" data-index="5">
+            <div class="slide-content">
+                <div class="image-gallery" id="gallery-page6" style="position: relative; width: 100%; max-width: 800px; height: 450px; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); cursor: pointer;" onclick="toggleGallery('gallery-page6', event)">
+                    <div class="gallery-img active" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图六 (1).jpg') center/cover; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图六 (2).jpg') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-indicator" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 1; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                    </div>
+                    <div class="gallery-hint" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 40px; height: 40px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; opacity: 0.7; transition: opacity 0.3s;">→</div>
+                </div>
+                <div class="slide-text">
+                    <h2>走出校门，才知道世界长什么样。</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第7页 | 班级团建 -->
+        <div class="slide normal" data-index="6">
+            <div class="slide-content">
+                <div class="image-gallery" id="gallery-page7" style="position: relative; width: 100%; max-width: 800px; height: 450px; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); cursor: pointer;" onclick="toggleGallery('gallery-page7', event)">
+                    <div class="gallery-img active" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图7 (1).jpg') center/cover; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图7 (2).jpg') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图7 (3).jpg') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图7 (4).jpg') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图7 (5).jpg') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图7 (6).jpg') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图7 (7).jpg') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图7（4）.jpg') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图7（5）.jpg') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图7（6）.jpg') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-indicator" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 10;">
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: white; opacity: 1; transition: opacity 0.3s;"></span>
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                    </div>
+                    <div class="gallery-hint" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 40px; height: 40px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; opacity: 0.7; transition: opacity 0.3s;">→</div>
+                </div>
+                <div class="slide-text">
+                    <h2>大学不只是学习，也是跟人在一起。</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第8页 | 当教官 -->
+        <div class="slide normal" data-index="7">
+            <div class="slide-content">
+                <div class="image-gallery" id="gallery-page8" style="position: relative; width: 100%; max-width: 800px; height: 450px; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); cursor: pointer;" onclick="toggleGallery('gallery-page8', event)">
+                    <div class="gallery-img active" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图八 (1).jpg') center/cover; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图八 (2).jpg') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-indicator" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 1; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                    </div>
+                    <div class="gallery-hint" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 40px; height: 40px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; opacity: 0.7; transition: opacity 0.3s;">→</div>
+                </div>
+                <div class="slide-text">
+                    <h2>站在别人面前，你得先站稳自己。</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第9页 | AI 的起点 -->
+        <div class="slide normal" data-index="8">
+            <div class="slide-content">
+                <div class="image-gallery" id="gallery-page9" style="position: relative; width: 100%; max-width: 800px; height: 450px; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); cursor: pointer;" onclick="toggleGallery('gallery-page9', event)">
+                    <div class="gallery-img active" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图9 (1).png') center/cover; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图9 (2).png') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图9 (3).png') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图9 (4).png') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图9 (5).png') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图9 (6).png') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-indicator" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 1; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                    </div>
+                    <div class="gallery-hint" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 40px; height: 40px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; opacity: 0.7; transition: opacity 0.3s;">→</div>
+                </div>
+                <div class="slide-text">
+                    <h2>然后，我遇到了 AI。</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第10页 | AI 成果 -->
+        <div class="slide normal" data-index="9">
+            <div class="slide-content">
+                <div class="folder-explosion-container" id="folder-container-10">
+                    <div class="folder-wrapper">
+                        <div class="folder-icon" id="folder-10" onclick="openFolder('folder-10', 'explosion-grid-10')">
+                            <span>✨</span>
+                        </div>
+                        <div class="folder-hint">点击打开文件夹</div>
+                    </div>
+                    <div class="explosion-grid" id="explosion-grid-10">
+                        <div class="explosion-item" onclick="openImageModal('images/图10 (1).png')"><img src="images/图10 (1).png" alt=""></div>
+                        <div class="explosion-item" onclick="openImageModal('images/图10 (2).png')"><img src="images/图10 (2).png" alt=""></div>
+                        <div class="explosion-item" onclick="openImageModal('images/图10 (3).png')"><img src="images/图10 (3).png" alt=""></div>
+                        <div class="explosion-item" onclick="openImageModal('images/图10 (4).png')"><img src="images/图10 (4).png" alt=""></div>
+                        <div class="explosion-item" onclick="openImageModal('images/图10 (5).png')"><img src="images/图10 (5).png" alt=""></div>
+                        <div class="explosion-item" onclick="openImageModal('images/图10 (6).png')"><img src="images/图10 (6).png" alt=""></div>
+                        <div class="explosion-item" onclick="openImageModal('images/图10 (7).png')"><img src="images/图10 (7).png" alt=""></div>
+                        <div class="explosion-item" onclick="openImageModal('images/图10 (8).png')"><img src="images/图10 (8).png" alt=""></div>
+                        <div class="explosion-item" onclick="openImageModal('images/图10 (9).png')"><img src="images/图10 (9).png" alt=""></div>
+                        <div class="explosion-item" onclick="openImageModal('images/图10 (10).jpg')"><img src="images/图10 (10).jpg" alt=""></div>
+                        <div class="explosion-item" onclick="openImageModal('images/图10 (11).jpg')"><img src="images/图10 (11).jpg" alt=""></div>
+                        <div class="explosion-item" onclick="openImageModal('images/图10 (12).jpg')"><img src="images/图10 (12).jpg" alt=""></div>
+                    </div>
+                    <button class="reset-btn" onclick="resetFolder('folder-10', 'explosion-grid-10')">↺</button>
+                </div>
+                <div class="slide-text">
+                    <h2>我在 AI 这条路上，确实走出了成绩。</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第11页 | AI 视频 & 宣传片 -->
+        <div class="slide normal" data-index="10">
+            <div class="slide-content">
+                <div class="image-gallery" id="gallery-page11" style="position: relative; width: 100%; max-width: 800px; height: 450px; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); cursor: pointer;" onclick="toggleGallery('gallery-page11', event)">
+                    <div class="gallery-img active" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图11 (1).png') center/cover; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图11 (2).png') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图11 (3).png') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图11 (4).png') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-indicator" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 1; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                    </div>
+                    <div class="gallery-hint" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 40px; height: 40px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; opacity: 0.7; transition: opacity 0.3s;">→</div>
+                </div>
+                <div class="slide-text">
+                    <h2>我用 AI 做视频、做宣传片。
+不是作业，是真实的作品。</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第12页 | 被看见 -->
+        <div class="slide normal" data-index="11">
+            <div class="slide-content">
+                <div class="image-gallery" id="gallery-page12" style="position: relative; width: 100%; max-width: 800px; height: 450px; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); cursor: pointer;" onclick="toggleGallery('gallery-page12', event)">
+                    <div class="gallery-img active" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图12 (1).png') center/cover; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图12 (1).jpg') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图12 (2).png') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-indicator" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 1; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                    </div>
+                    <div class="gallery-hint" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 40px; height: 40px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; opacity: 0.7; transition: opacity 0.3s;">→</div>
+                </div>
+                <div class="slide-text">
+                    <h2>前辈发来 offer，同行找我合作。
+一个二本大三学生，靠作品说话。</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第13页 | 累了 -->
+        <div class="slide text-only" data-index="12">
+            <div class="slide-content">
+                <div class="slide-text">
+                    <h2>然后我发现——
+我真的好累，我不想做了。</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第14页 | 远离网络 -->
+        <div class="slide normal" data-index="13">
+            <div class="slide-content">
+                <div class="slide-image" style="background: url('images/图14.png') center/cover;"></div>
+                <div class="slide-text">
+                    <h2>所以我做了一个决定——
+一个月，不玩社交媒体。不怎么用手机和电脑。</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第15页 | 开始怀疑 -->
+        <div class="slide normal" data-index="14">
+            <div class="slide-content">
+                <div class="image-gallery" id="gallery-page15" style="position: relative; width: 100%; max-width: 800px; height: 450px; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); cursor: pointer;" onclick="toggleGallery('gallery-page15', event)">
+                    <div class="gallery-img active" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图15 (1).png') center/cover; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图15 (2).png') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图15 (3).png') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-indicator" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 1; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                    </div>
+                    <div class="gallery-hint" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 40px; height: 40px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; opacity: 0.7; transition: opacity 0.3s;">→</div>
+                </div>
+                <div class="slide-text">
+                    <h2>AI 是不是需要这么强大？
+我到底需要一个什么样的 AI？</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第16页 | 走错了 -->
+        <div class="slide text-only" data-index="15">
+            <div class="slide-content">
+                <div class="slide-text">
+                    <h2>这三年，我把工具当成了终点。</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第17页 | 足球 -->
+        <div class="slide normal" data-index="16">
+            <div class="slide-content">
+                <div class="slide-image" style="background: url('images/图16.jpg') center/cover;"></div>
+                <div class="slide-text">
+                    <h2>踢足球的时候，我从来不焦虑。
+但不是因为足球本身。</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第18页 | 核心方法 -->
+        <div class="slide normal" data-index="17">
+            <div class="slide-content">
+                <div class="slide-text" style="max-width: 900px;">
+                    <h2 style="font-size: 38px; line-height: 2;">一件能持续的事情，即是终点；
+一件能学下去但用于服务其他事情的，是工具。</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第19页 | 我的调整 -->
+        <div class="slide normal" data-index="18">
+            <div class="slide-content">
+                <div class="image-gallery" id="gallery-page19" style="position: relative; width: 100%; max-width: 800px; height: 450px; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); cursor: pointer;" onclick="toggleGallery('gallery-page19', event)">
+                    <div class="gallery-img active" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图19（1）.jpg') center/cover; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图19（2）.jpg') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/图19（3）.jpg') center/cover; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease;"></div>
+                    <div class="gallery-indicator" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 1; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: opacity 0.3s;"></span>
+                    </div>
+                    <div class="gallery-hint" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 40px; height: 40px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; opacity: 0.7; transition: opacity 0.3s;">→</div>
+                </div>
+                <div class="slide-text">
+                    <h2>从组织一场球赛，到组织一群人。</h2>
+                    <h2>方向：人力资源。</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第20页 | 读书 -->
+        <div class="slide normal" data-index="19">
+            <div class="slide-content">
+                <div class="slide-image" style="background: url('images/书籍.jpg') center/cover;"></div>
+                <div class="slide-text">
+                    <h2>放下手机，拿起书。
+没有算法推荐，只有你自己的选择。</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第21页 | AI 的正确用法 -->
+        <div class="slide normal" data-index="20">
+            <div class="slide-content">
+                <div class="slide-image" style="background: url('images/图21.png') center/cover;"></div>
+                <div class="slide-text">
+                    <h2>不要让 AI 替你做事。</h2>
+                    <h2>让 AI 增强你做事的结果。</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第22页 | 采访二本学生 -->
+        <div class="slide normal" data-index="21">
+            <div class="slide-content">
+                <div class="slide-image" style="background: url('images/图22.jpg') center/cover; display: flex; align-items: center; justify-content: center;">🎤</div>
+                <div class="slide-text">
+                    <h2>接下来，梧桐树要做一件事——</h2>
+                    <h2>采访二本学校里，那些真正有故事的人。</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第23页 | 结尾 + 资源 -->
+        <div class="slide resources" data-index="22">
+            <div class="slide-content">
+                <div class="avatar-section">
+                    <div class="avatar">👤</div>
+                    <p style="font-size: 24px; color: white; font-weight: 500;">我也还在路上。</p>
+                    <p style="font-size: 18px; color: rgba(255,255,255,0.8); margin-top: 10px;">谢谢大家。</p>
+                    <p style="font-size: 20px; color: white; margin-top: 20px; font-family: 'Playfair Display', serif;">—— 吴桐</p>
+                </div>
+                <div class="qr-section">
+                    <div class="qr-code" style="background: url('images/二维码.png') center/cover; background-color: white;"></div>
+                    <h3>扫码获取</h3>
+                    <div class="resource-list">
+                        <p>📌 今天的 PPT（可点击跳转）</p>
+                        <p>📌 AI 使用教程 & 思考分享</p>
+                        <p>📌 读书 VIP 体验卡</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图片放大查看模态框 -->
+    <div class="image-modal" id="imageModal">
+        <button class="modal-close" onclick="closeImageModal()">✕</button>
+        <img id="modalImage" src="" alt="">
+    </div>
+
+    <!-- 点击区域 -->
+    <div class="click-area left" onclick="prevSlide()"></div>
+    <div class="click-area right" onclick="nextSlide()"></div>
+
+    <!-- 顶部进度条 -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar" style="width: 0%;"></div>
+    </div>
+    <div class="progress-dots" id="progressDots"></div>
+    <span class="page-indicator"><span id="currentPage">1</span> / 23</span>
+
+    <!-- 导航提示 -->
+    <div class="nav-hint">点击左右两侧或使用键盘 ← → 切换</div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        // 初始化进度点
+        function initProgressDots() {
+            const container = document.getElementById('progressDots');
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'progress-dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goToSlide(i);
+                container.appendChild(dot);
+            }
+        }
+
+        // 更新进度条
+        function updateProgressBar() {
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            // 更新圆点状态
+            const dots = document.querySelectorAll('.progress-dot');
+            dots.forEach((dot, index) => {
+                dot.classList.remove('active', 'passed');
+                if (index === currentSlide) {
+                    dot.classList.add('active');
+                } else if (index < currentSlide) {
+                    dot.classList.add('passed');
+                }
+            });
+        }
+
+        // 切换到指定页面
+        function goToSlide(index) {
+            if (index < 0 || index >= totalSlides) return;
+            
+            slides[currentSlide].classList.remove('active');
+            
+            currentSlide = index;
+            
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('currentPage').textContent = currentSlide + 1;
+            updateProgressBar();
+        }
+
+        // 下一页
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                goToSlide(currentSlide + 1);
+            }
+        }
+
+        // 上一页
+        function prevSlide() {
+            if (currentSlide > 0) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+
+        // 键盘导航
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // 触摸滑动支持
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        }
+
+        // 图片画廊切换功能
+        const galleryState = {};
+        
+        function toggleGallery(galleryId, event) {
+            // 阻止事件冒泡，防止触发页面切换
+            if (event) {
+                event.stopPropagation();
+            }
+            
+            const gallery = document.getElementById(galleryId);
+            if (!gallery) return;
+            
+            const images = gallery.querySelectorAll('.gallery-img');
+            const indicators = gallery.querySelectorAll('.gallery-indicator span');
+            const totalImages = images.length;
+            
+            if (!galleryState[galleryId]) {
+                galleryState[galleryId] = 0;
+            }
+            
+            // 当前图片淡出
+            images[galleryState[galleryId]].style.opacity = '0';
+            images[galleryState[galleryId]].style.transform = 'scale(1.05)';
+            indicators[galleryState[galleryId]].style.opacity = '0.4';
+            
+            // 切换到下一页
+            galleryState[galleryId] = (galleryState[galleryId] + 1) % totalImages;
+            
+            // 新图片淡入
+            setTimeout(() => {
+                images[galleryState[galleryId]].style.opacity = '1';
+                images[galleryState[galleryId]].style.transform = 'scale(1)';
+                indicators[galleryState[galleryId]].style.opacity = '1';
+            }, 50);
+        }
+
+        // 文件夹打开动画 - 优化版
+        function openFolder(folderId, gridId) {
+            const folder = document.getElementById(folderId);
+            const grid = document.getElementById(gridId);
+            
+            if (folder.classList.contains('opened')) return;
+            
+            // 添加打开状态
+            folder.classList.add('opened');
+            
+            // 延迟显示图片网格
+            setTimeout(() => {
+                grid.classList.add('active');
+            }, 300);
+        }
+
+        // 重置文件夹
+        function resetFolder(folderId, gridId) {
+            const folder = document.getElementById(folderId);
+            const grid = document.getElementById(gridId);
+            
+            // 先隐藏图片网格
+            grid.classList.remove('active');
+            
+            // 延迟显示文件夹
+            setTimeout(() => {
+                folder.classList.remove('opened');
+            }, 400);
+        }
+
+        // 打开图片模态框
+        function openImageModal(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            
+            modalImage.src = imageSrc;
+            modal.classList.add('active');
+        }
+
+        // 关闭图片模态框
+        function closeImageModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+        }
+
+        // 点击模态框背景关闭
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeImageModal();
+            }
+        });
+
+        // ESC键关闭模态框
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeImageModal();
+                closeLightbox();
+            }
+        });
+
+        // 灯箱功能
+        function openLightbox(src) {
+            let lightbox = document.getElementById('lightbox');
+            if (!lightbox) {
+                lightbox = document.createElement('div');
+                lightbox.id = 'lightbox';
+                lightbox.className = 'lightbox';
+                lightbox.innerHTML = `
+                    <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+                    <img src="" alt="放大图片">
+                `;
+                lightbox.onclick = function(e) {
+                    if (e.target === lightbox) {
+                        closeLightbox();
+                    }
+                };
+                document.body.appendChild(lightbox);
+            }
+            lightbox.querySelector('img').src = src;
+            lightbox.classList.add('active');
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            if (lightbox) {
+                lightbox.classList.remove('active');
+            }
+        }
+
+        // 初始化
+        initProgressDots();
+        updateProgressBar();
+    </script>
+</body>
+</html>
